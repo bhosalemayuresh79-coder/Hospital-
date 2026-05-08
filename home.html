@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aya Hospital — Home</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="aya-header">
+    <div class="d-flex justify-between align-center">
+      <div>
+        <h1>🏥 Aya Hospital</h1>
+        <div class="tagline">Aapki Seva Yahi Humara Kartavya</div>
+      </div>
+      <div id="headerDate" style="font-size:0.72rem;opacity:0.85;text-align:right;"></div>
+    </div>
+  </header>
+
+  <!-- Page Content -->
+  <div class="page-content">
+
+    <!-- Welcome -->
+    <div class="card" style="background: linear-gradient(135deg, var(--blue), var(--blue-dark)); color: white; border: none;">
+      <div style="font-size:0.82rem;opacity:0.88;">Good day 👋</div>
+      <div style="font-size:1.25rem;font-weight:700;margin-top:4px;" id="welcomeName">Welcome!</div>
+      <div style="font-size:0.75rem;opacity:0.8;margin-top:4px;">Your health is our priority.</div>
+    </div>
+
+    <!-- Stats -->
+    <div class="section-title">Today's Overview</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;">
+      <div class="stat-card">
+        <div class="stat-icon">🧑‍⚕️</div>
+        <div class="stat-num">142</div>
+        <div class="stat-lbl">Patients Today</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">👨‍⚕️</div>
+        <div class="stat-num">18</div>
+        <div class="stat-lbl">Doctors Available</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🚨</div>
+        <div class="stat-num" style="color:var(--red);">3</div>
+        <div class="stat-lbl">Emergency</div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="section-title">Quick Actions</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+      <a href="patient.html" class="card" style="text-decoration:none;text-align:center;padding:18px 10px;">
+        <div style="font-size:2rem;">📋</div>
+        <div style="font-size:0.82rem;font-weight:600;margin-top:6px;">Add Patient</div>
+      </a>
+      <a href="appointment.html" class="card" style="text-decoration:none;text-align:center;padding:18px 10px;">
+        <div style="font-size:2rem;">📅</div>
+        <div style="font-size:0.82rem;font-weight:600;margin-top:6px;">Book Appt.</div>
+      </a>
+      <a href="emergency.html" class="card" style="text-decoration:none;text-align:center;padding:18px 10px;background:var(--red-light);">
+        <div style="font-size:2rem;">🚨</div>
+        <div style="font-size:0.82rem;font-weight:600;margin-top:6px;color:var(--red);">Emergency</div>
+      </a>
+      <a href="profile.html" class="card" style="text-decoration:none;text-align:center;padding:18px 10px;">
+        <div style="font-size:2rem;">👤</div>
+        <div style="font-size:0.82rem;font-weight:600;margin-top:6px;">My Profile</div>
+      </a>
+    </div>
+
+    <!-- Upcoming Appointment Preview -->
+    <div class="section-title">Next Appointment</div>
+    <div id="nextAppt" class="card">
+      <p class="text-muted" style="text-align:center;">No upcoming appointments.</p>
+    </div>
+
+    <!-- Activity Feed -->
+    <div class="section-title">Recent Activity</div>
+    <div class="card" id="activityFeed">
+      <div class="activity-item">
+        <div class="activity-dot"></div>
+        <div>
+          <div class="act-title">Patient form saved</div>
+          <div class="act-time">Today, 10:32 AM</div>
+        </div>
+      </div>
+      <div class="activity-item">
+        <div class="activity-dot" style="background:var(--red);"></div>
+        <div>
+          <div class="act-title">Emergency contact dialed</div>
+          <div class="act-time">Today, 09:15 AM</div>
+        </div>
+      </div>
+      <div class="activity-item">
+        <div class="activity-dot" style="background:var(--success);"></div>
+        <div>
+          <div class="act-title">Appointment booked — Dr. Sharma</div>
+          <div class="act-time">Yesterday, 4:00 PM</div>
+        </div>
+      </div>
+      <div class="activity-item">
+        <div class="activity-dot"></div>
+        <div>
+          <div class="act-title">Profile updated</div>
+          <div class="act-time">Yesterday, 2:45 PM</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /page-content -->
+
+  <!-- Tab Bar -->
+  <div id="tabBar"></div>
+
+  <script src="app.js"></script>
+  <script>
+    const user = requireAuth();
+    document.getElementById('welcomeName').textContent = 'Welcome, ' + user.name + '!';
+    document.getElementById('tabBar').innerHTML = buildTabBar('home');
+
+    // Date
+    const now = new Date();
+    document.getElementById('headerDate').innerHTML =
+      now.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' }) +
+      '<br>' + now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+
+    // Next appointment
+    const appts = getAppointments();
+    const nextApptEl = document.getElementById('nextAppt');
+    if (appts.length > 0) {
+      const a = appts[0];
+      nextApptEl.innerHTML = `
+        <div class="d-flex justify-between align-center">
+          <div>
+            <div class="fw-700">${a.doctor}</div>
+            <div class="text-muted mt-1">${formatDate(a.date)} • ${a.slot}</div>
+            <div class="mt-1"><span class="badge badge-blue">${a.type}</span></div>
+          </div>
+          <div style="font-size:2.2rem;">📅</div>
+        </div>`;
+    }
+  </script>
+</body>
+</html>
