@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aya Hospital — Login</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="login-page">
+
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="logo-icon">🏥</div>
+      <h2>Aya Hospital</h2>
+      <p>Aapki Seva Yahi Humara Kartavya</p>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email Address</label>
+      <input type="email" id="email" class="form-control" placeholder="you@example.com" autocomplete="email" />
+    </div>
+
+    <div class="form-group">
+      <label for="name">Your Name</label>
+      <input type="text" id="name" class="form-control" placeholder="Full Name" autocomplete="name" />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" class="form-control" placeholder="••••••••" autocomplete="current-password" />
+    </div>
+
+    <button class="btn-primary mt-2" onclick="doLogin()">Login →</button>
+
+    <p class="text-muted text-center mt-2" style="font-size:0.75rem;">
+      By logging in, you agree to our Terms & Privacy Policy
+    </p>
+  </div>
+
+  <div class="toast-msg"></div>
+
+  <script src="app.js"></script>
+  <script>
+    // If already logged in, skip to home
+    if (getUser()) window.location.href = 'home.html';
+
+    function doLogin() {
+      const email    = document.getElementById('email').value.trim();
+      const name     = document.getElementById('name').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (!email || !name || !password) {
+        showToast('⚠️ Please fill all fields'); return;
+      }
+      if (!email.includes('@')) {
+        showToast('⚠️ Enter a valid email'); return;
+      }
+      if (password.length < 4) {
+        showToast('⚠️ Password too short'); return;
+      }
+
+      setUser({ name, email });
+      showToast('✅ Welcome, ' + name + '!');
+      setTimeout(() => { window.location.href = 'home.html'; }, 800);
+    }
+
+    // Allow Enter key
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter') doLogin();
+    });
+  </script>
+</body>
+</html>
