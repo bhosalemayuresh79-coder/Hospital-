@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aya Hospital — Emergency</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Emergency Header -->
+  <div class="emergency-header">
+    <div style="font-size:2.5rem;">🚨</div>
+    <h1>EMERGENCY</h1>
+    <p style="font-size:0.82rem;opacity:0.9;margin-top:4px;">Tap below for immediate help</p>
+  </div>
+
+  <div class="page-content">
+
+    <!-- Ambulance Call -->
+    <div class="card text-center" style="padding: 28px 16px;">
+      <div style="font-size:0.9rem;font-weight:600;color:var(--text-muted);margin-bottom:8px;">National Ambulance</div>
+      <div class="emergency-number">108</div>
+      <div style="font-size:0.78rem;color:var(--text-muted);margin:8px 0 20px;">Free service — available 24/7</div>
+      <a href="tel:108" class="btn-danger pulse-btn" style="display:block;padding:18px;font-size:1.1rem;border-radius:14px;text-decoration:none;text-align:center;">
+        📞 Call 108 — Ambulance
+      </a>
+    </div>
+
+    <!-- Share Location -->
+    <div class="card">
+      <div style="font-weight:700;font-size:0.95rem;margin-bottom:10px;">📍 Share My Location</div>
+      <p class="text-muted" style="margin-bottom:14px;line-height:1.5;">
+        Send your GPS location to emergency contacts via WhatsApp.
+      </p>
+      <button class="btn-outline" onclick="shareLocation()">📤 Share Location via WhatsApp</button>
+      <div id="locationStatus" class="text-muted mt-2" style="font-size:0.78rem;text-align:center;"></div>
+    </div>
+
+    <!-- Other Emergency Numbers -->
+    <div class="section-title">Emergency Contacts</div>
+    <div class="card">
+      <div class="contact-row">
+        <div>
+          <div class="contact-name">🏥 Hospital Front Desk</div>
+          <div class="contact-num">+91-1800-XXX-1234</div>
+        </div>
+        <a href="tel:+911800XXX1234"><button class="call-mini">📞 Call</button></a>
+      </div>
+      <div class="contact-row">
+        <div>
+          <div class="contact-name">🚒 Fire Brigade</div>
+          <div class="contact-num">101</div>
+        </div>
+        <a href="tel:101"><button class="call-mini">📞 Call</button></a>
+      </div>
+      <div class="contact-row">
+        <div>
+          <div class="contact-name">👮 Police</div>
+          <div class="contact-num">100</div>
+        </div>
+        <a href="tel:100"><button class="call-mini">📞 Call</button></a>
+      </div>
+      <div class="contact-row">
+        <div>
+          <div class="contact-name">🆘 Disaster Management</div>
+          <div class="contact-num">1078</div>
+        </div>
+        <a href="tel:1078"><button class="call-mini">📞 Call</button></a>
+      </div>
+      <div class="contact-row">
+        <div>
+          <div class="contact-name">🧠 Mental Health Helpline</div>
+          <div class="contact-num">iCall: 9152987821</div>
+        </div>
+        <a href="tel:9152987821"><button class="call-mini">📞 Call</button></a>
+      </div>
+    </div>
+
+    <!-- First Aid Tips -->
+    <div class="section-title">Quick First Aid Tips</div>
+    <div class="card">
+      <div style="display:grid;gap:10px;">
+        <div style="background:var(--blue-light);border-radius:9px;padding:12px;">
+          <div style="font-weight:700;font-size:0.88rem;">🫀 CPR</div>
+          <div class="text-muted" style="margin-top:4px;">30 chest compressions → 2 rescue breaths. Repeat until help arrives.</div>
+        </div>
+        <div style="background:#fff8e1;border-radius:9px;padding:12px;">
+          <div style="font-weight:700;font-size:0.88rem;">🩹 Bleeding</div>
+          <div class="text-muted" style="margin-top:4px;">Apply firm pressure with clean cloth. Do not remove. Elevate limb if possible.</div>
+        </div>
+        <div style="background:var(--red-light);border-radius:9px;padding:12px;">
+          <div style="font-weight:700;font-size:0.88rem;">🌡️ Heat Stroke</div>
+          <div class="text-muted" style="margin-top:4px;">Move to shade. Cool with wet cloth. Give water if conscious. Call 108.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Tab Bar -->
+  <div id="tabBar"></div>
+  <div class="toast-msg"></div>
+
+  <script src="app.js"></script>
+  <script>
+    requireAuth();
+    document.getElementById('tabBar').innerHTML = buildTabBar('emergency');
+
+    function shareLocation() {
+      const statusEl = document.getElementById('locationStatus');
+      const user = getUser();
+      const patient = getPatient();
+      const name = (patient && patient.fullName) || (user && user.name) || 'Patient';
+
+      statusEl.textContent = '🔍 Getting your location…';
+
+      if (!navigator.geolocation) {
+        statusEl.textContent = '❌ Geolocation not supported on this device.';
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude.toFixed(6);
+          const lng = pos.coords.longitude.toFixed(6);
+          const mapsLink = `https://maps.google.com/?q=${lat},${lng}`;
+          const msg = encodeURIComponent(
+            `🚨 EMERGENCY!\nPatient: ${name}\nLocation: ${mapsLink}\nPlease send help immediately!`
+          );
+          statusEl.textContent = `✅ Location found: ${lat}, ${lng}`;
+          window.open(`https://wa.me/?text=${msg}`, '_blank');
+        },
+        (err) => {
+          statusEl.textContent = '❌ Could not get location. Please enable GPS.';
+        },
+        { timeout: 10000, enableHighAccuracy: true }
+      );
+    }
+  </script>
+</body>
+</html>
