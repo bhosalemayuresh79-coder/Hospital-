@@ -39,7 +39,47 @@
 
   <div class="toast-msg"></div>
 
+  <!-- ================================================
+       BOOTSTRAP 5 CDN
+  ================================================ -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- ================================================
+       FIREBASE SDK (v10 - CDN compat mode)
+  ================================================ -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js"></script>
+
+  <!-- ================================================
+       FIREBASE INITIALIZATION
+  ================================================ -->
+  <script>
+    const firebaseConfig = {
+      apiKey:            "AIzaSyAngOxc99dsVId7JS08IiVWcq4sA5NsDR4",
+      authDomain:        "gemini-prompt-8e465.firebaseapp.com",
+      projectId:         "gemini-prompt-8e465",
+      storageBucket:     "gemini-prompt-8e465.firebasestorage.app",
+      messagingSenderId: "994008586611",
+      appId:             "1:994008586611:web:304aec118fe52eeb17cd06",
+      measurementId:     "G-EYQL3DWSXW"
+    };
+
+    // Initialize Firebase
+    const firebaseApp = firebase.initializeApp(firebaseConfig);
+    const analytics   = firebase.analytics();
+
+    console.log("✅ Firebase initialized — Aya Hospital");
+  </script>
+
+  <!-- ================================================
+       APP JS (localStorage helpers, navigation)
+  ================================================ -->
   <script src="app.js"></script>
+
+  <!-- ================================================
+       LOGIN LOGIC
+  ================================================ -->
   <script>
     // If already logged in, skip to home
     if (getUser()) window.location.href = 'home.html';
@@ -64,10 +104,11 @@
       setTimeout(() => { window.location.href = 'home.html'; }, 800);
     }
 
-    // Allow Enter key
+    // Allow Enter key to submit
     document.addEventListener('keydown', e => {
       if (e.key === 'Enter') doLogin();
     });
   </script>
+
 </body>
 </html>
