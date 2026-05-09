@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aya Hospital — Appointments</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="aya-header">
+    <h1>📅 Appointments</h1>
+    <div class="tagline">Book & manage your doctor visits</div>
+  </header>
+
+  <div class="page-content">
+
+    <!-- Booking Form -->
+    <div class="section-title">Book Appointment</div>
+    <div class="card">
+
+      <div class="form-group">
+        <label>Patient Name</label>
+        <input type="text" id="apptPatient" class="form-control" readonly />
+      </div>
+
+      <div class="form-group">
+        <label>Select Doctor Specialty</label>
+        <select id="apptDoctor" class="form-control">
+          <option value="">— Choose Specialty —</option>
+          <option>General Physician</option>
+          <option>Cardiologist</option>
+          <option>Orthopedic</option>
+          <option>Neurologist</option>
+          <option>Gynecologist</option>
+          <option>Pediatrician</option>
+          <option>Dermatologist</option>
+          <option>ENT Specialist</option>
+          <option>Ophthalmologist</option>
+          <option>Psychiatrist</option>
+          <option>Pulmonologist</option>
+          <option>Gastroenterologist</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Appointment Date</label>
+        <input type="date" id="apptDate" class="form-control" />
+      </div>
+
+      <div class="form-group">
+        <label>Time Slot</label>
+        <select id="apptSlot" class="form-control">
+          <option value="">— Choose Slot —</option>
+          <option>Morning (8:00 AM – 12:00 PM)</option>
+          <option>Afternoon (12:00 PM – 4:00 PM)</option>
+          <option>Evening (4:00 PM – 8:00 PM)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Appointment Type</label>
+        <div class="d-flex gap-2">
+          <label style="flex:1;display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:10px 12px;cursor:pointer;">
+            <input type="radio" name="apptType" value="In-person" checked /> In-person 🏥
+          </label>
+          <label style="flex:1;display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:10px 12px;cursor:pointer;">
+            <input type="radio" name="apptType" value="Video Call" /> Video Call 📹
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Reason for Visit</label>
+        <textarea id="apptReason" class="form-control" rows="3"
+          placeholder="Briefly describe your symptoms or reason…"></textarea>
+      </div>
+
+      <button class="btn-primary" onclick="bookAppointment()">✅ Book Appointment</button>
+    </div>
+
+    <!-- Upcoming Appointments -->
+    <div class="section-title">Upcoming Appointments</div>
+    <div id="apptList">
+      <p class="text-muted text-center" style="padding:20px 0;">No appointments booked yet.</p>
+    </div>
+
+  </div>
+
+  <!-- Tab Bar -->
+  <div id="tabBar"></div>
+  <div class="toast-msg"></div>
+
+  <script src="app.js"></script>
+  <script>
+    requireAuth();
+    document.getElementById('tabBar').innerHTML = buildTabBar('appointment');
+
+    // Pre-fill patient name
+    const patient = getPatient();
+    const user = getUser();
+    const patientName = (patient && patient.fullName) || (user && user.name) || '';
+    document.getElementById('apptPatient').value = patientName;
+
+    // Set min date to today
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('apptDate').setAttribute('min', today);
+
+    // Render appointments
+    function renderAppointments() {
+      const list = document.getElementById('apptList');
+      const appts = getAppointments();
+      if (!appts.length) {
+        list.innerHTML = '<p class="text-muted text-center" style="padding:20px 0;">No appointments booked yet.</p>';
+        return;
+      }
+      list.innerHTML = appts.map(a => `
+        <div class="appt-card">
+          <div class="d-flex justify-between align-center">
+            <div>
+              <div class="appt-doc">👨‍⚕️ ${a.doctor}</div>
+              <div class="appt-meta">📅 ${formatDate(a.date)} &nbsp;•&nbsp; ⏰ ${a.slot}</div>
+              <div class="appt-meta">🏷️ ${a.type}</div>
+              ${a.reason ? `<div class="appt-meta mt-1">📝 ${a.reason}</div>` : ''}
+            </div>
+            <span class="badge badge-blue">Upcoming</span>
+          </div>
+          <button class="btn-cancel" onclick="cancelAppt('${a.id}')">✖ Cancel</button>
+        </div>
+      `).join('');
+    }
+
+    function bookAppointment() {
+      const doctor = document.getElementById('apptDoctor').value;
+      const date   = document.getElementById('apptDate').value;
+      const slot   = document.getElementById('apptSlot').value;
+      const type   = document.querySelector('input[name="apptType"]:checked').value;
+      const reason = document.getElementById('apptReason').value.trim();
+
+      if (!doctor || !date || !slot) {
+        showToast('⚠️ Please fill Doctor, Date, and Slot'); return;
+      }
+
+      addAppointment({ doctor, date, slot, type, reason, patient: patientName });
+      showToast('✅ Appointment booked!');
+      renderAppointments();
+
+      // Reset
+      document.getElementById('apptDoctor').value = '';
+      document.getElementById('apptDate').value = '';
+      document.getElementById('apptSlot').value = '';
+      document.getElementById('apptReason').value = '';
+    }
+
+    function cancelAppt(id) {
+      if (!confirm('Cancel this appointment?')) return;
+      cancelAppointment(id);
+      showToast('Appointment cancelled.');
+      renderAppointments();
+    }
+
+    renderAppointments();
+  </script>
+</body>
+</html>
