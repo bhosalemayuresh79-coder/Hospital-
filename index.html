@@ -9,13 +9,17 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
     rel="stylesheet" />
 
+  <!-- Google Fonts — Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+
   <!-- Shared CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="login-page">
 
   <!-- ================================================
-       LOGIN CARD
+       LOGIN CARD — Purana UI bilkul same
   ================================================ -->
   <div class="login-card">
 
@@ -26,7 +30,7 @@
       <p>Aapki Seva Yahi Humara Kartavya</p>
     </div>
 
-    <!-- Email Field — id="email" -->
+    <!-- Email Field -->
     <div class="form-group">
       <label for="email">Email Address</label>
       <input
@@ -38,7 +42,7 @@
       />
     </div>
 
-    <!-- Name Field — id="name" -->
+    <!-- Name Field -->
     <div class="form-group">
       <label for="name">Your Name</label>
       <input
@@ -50,7 +54,7 @@
       />
     </div>
 
-    <!-- Password Field — id="password" -->
+    <!-- Password Field -->
     <div class="form-group">
       <label for="password">Password</label>
       <input
@@ -70,11 +74,13 @@
       Login →
     </button>
 
-    <!-- Register Link -->
-    <p class="text-center mt-2" style="font-size:0.82rem;">
-      Naya account?
-      <a href="#"
-        onclick="doRegister()"
+    <!-- Create Account Link -->
+    <p class="text-center mt-2" style="font-size:0.84rem;color:var(--text-muted);">
+      Naya account banana hai?
+      <a
+        href="#"
+        data-bs-toggle="modal"
+        data-bs-target="#registerModal"
         style="color:var(--blue);font-weight:600;text-decoration:none;">
         Register karo
       </a>
@@ -82,25 +88,169 @@
 
     <!-- Terms -->
     <p class="text-muted text-center mt-1" style="font-size:0.72rem;">
-      Login karke aap hamare Terms aur Privacy Policy se agree karte hain.
+      By logging in, you agree to our Terms &amp; Privacy Policy
     </p>
 
-    <!-- Bootstrap Alert yahan inject hoga (auth.js karegi) -->
+    <!-- Alert yahan inject hoga auth.js se -->
 
   </div><!-- /login-card -->
+  <!-- ================================================
+       REGISTER MODAL — Bootstrap Modal
+       "Register karo" click karne par khulega
+  ================================================ -->
+  <div
+    class="modal fade"
+    id="registerModal"
+    tabindex="-1"
+    aria-labelledby="registerModalLabel"
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="
+        border-radius: 18px;
+        border: none;
+        box-shadow: 0 8px 40px rgba(26,115,232,0.15);
+        font-family: 'Poppins', sans-serif;
+      ">
+
+        <!-- Modal Header -->
+        <div class="modal-header" style="
+          background: var(--blue);
+          border-radius: 18px 18px 0 0;
+          border: none;
+          padding: 18px 22px;
+        ">
+          <h5
+            class="modal-title"
+            id="registerModalLabel"
+            style="color:white;font-weight:700;font-size:1.05rem;">
+            🏥 Naya Account Banao
+          </h5>
+          <button
+            type="button"
+            class="btn-close btn-close-white"
+            data-bs-dismiss="modal"
+            aria-label="Close">
+          </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="modal-body" style="padding: 22px;">
+
+          <!-- Register Alert — yahan aayega -->
+          <div id="registerAlertBox"></div>
+
+          <!-- Full Name -->
+          <div class="form-group">
+            <label for="regName"
+              style="font-size:0.78rem;font-weight:600;
+              color:var(--text-muted);text-transform:uppercase;
+              letter-spacing:0.4px;display:block;margin-bottom:5px;">
+              Full Name
+            </label>
+            <input
+              type="text"
+              id="regName"
+              class="form-control"
+              placeholder="Apna poora naam daalo"
+            />
+          </div>
+
+          <!-- Email -->
+          <div class="form-group" style="margin-top:12px;">
+            <label for="regEmail"
+              style="font-size:0.78rem;font-weight:600;
+              color:var(--text-muted);text-transform:uppercase;
+              letter-spacing:0.4px;display:block;margin-bottom:5px;">
+              Email Address
+            </label>
+            <input
+              type="email"
+              id="regEmail"
+              class="form-control"
+              placeholder="you@example.com"
+            />
+          </div>
+
+          <!-- Password -->
+          <div class="form-group" style="margin-top:12px;">
+            <label for="regPassword"
+              style="font-size:0.78rem;font-weight:600;
+              color:var(--text-muted);text-transform:uppercase;
+              letter-spacing:0.4px;display:block;margin-bottom:5px;">
+              Password
+            </label>
+            <input
+              type="password"
+              id="regPassword"
+              class="form-control"
+              placeholder="Kam se kam 6 characters"
+            />
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="form-group" style="margin-top:12px;">
+            <label for="regConfirmPassword"
+              style="font-size:0.78rem;font-weight:600;
+              color:var(--text-muted);text-transform:uppercase;
+              letter-spacing:0.4px;display:block;margin-bottom:5px;">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              id="regConfirmPassword"
+              class="form-control"
+              placeholder="Password dobara daalo"
+            />
+          </div>
+
+        </div><!-- /modal-body -->
+
+        <!-- Modal Footer -->
+        <div class="modal-footer" style="
+          border: none;
+          padding: 0 22px 22px;
+          flex-direction: column;
+          gap: 10px;
+        ">
+
+          <!-- Register Button -->
+          <button
+            id="registerBtn"
+            class="btn-primary"
+            style="width:100%;"
+            onclick="doRegister()">
+            ✅ Account Banao
+          </button>
+
+          <!-- Cancel -->
+          <button
+            type="button"
+            class="btn-outline"
+            style="width:100%;"
+            data-bs-dismiss="modal">
+            Wapas Jao
+          </button>
+
+        </div><!-- /modal-footer -->
+
+      </div><!-- /modal-content -->
+    </div><!-- /modal-dialog -->
+  </div><!-- /registerModal -->
 
   <!-- ================================================
-       SCRIPTS — Order bahut zaroori hai
+       SCRIPTS — Sahi order mein
   ================================================ -->
 
-  <!-- 1. Bootstrap JS — pehle -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+  <!-- 1. Bootstrap JS -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
   </script>
 
-  <!-- 2. Firebase Config — Auth initialize hoga -->
+  <!-- 2. Firebase Config — pehle load hogi -->
   <script type="module" src="firebase-config.js"></script>
 
-  <!-- 3. Auth JS — Login/Register logic -->
+  <!-- 3. Auth JS — Login + Register logic -->
   <script type="module" src="auth.js"></script>
 
 </body>
