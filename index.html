@@ -4,111 +4,104 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aya Hospital — Login</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet" />
+
+  <!-- Shared CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="login-page">
 
+  <!-- ================================================
+       LOGIN CARD
+  ================================================ -->
   <div class="login-card">
+
+    <!-- Logo -->
     <div class="login-logo">
       <div class="logo-icon">🏥</div>
       <h2>Aya Hospital</h2>
       <p>Aapki Seva Yahi Humara Kartavya</p>
     </div>
 
+    <!-- Email Field — id="email" -->
     <div class="form-group">
       <label for="email">Email Address</label>
-      <input type="email" id="email" class="form-control" placeholder="you@example.com" autocomplete="email" />
+      <input
+        type="email"
+        id="email"
+        class="form-control"
+        placeholder="you@example.com"
+        autocomplete="email"
+      />
     </div>
 
+    <!-- Name Field — id="name" -->
     <div class="form-group">
       <label for="name">Your Name</label>
-      <input type="text" id="name" class="form-control" placeholder="Full Name" autocomplete="name" />
+      <input
+        type="text"
+        id="name"
+        class="form-control"
+        placeholder="Full Name"
+        autocomplete="name"
+      />
     </div>
 
+    <!-- Password Field — id="password" -->
     <div class="form-group">
       <label for="password">Password</label>
-      <input type="password" id="password" class="form-control" placeholder="••••••••" autocomplete="current-password" />
+      <input
+        type="password"
+        id="password"
+        class="form-control"
+        placeholder="••••••••"
+        autocomplete="current-password"
+      />
     </div>
 
-    <button class="btn-primary mt-2" onclick="doLogin()">Login →</button>
+    <!-- Login Button — id="loginBtn" zaroori hai -->
+    <button
+      id="loginBtn"
+      class="btn-primary mt-2"
+      onclick="doLogin()">
+      Login →
+    </button>
 
-    <p class="text-muted text-center mt-2" style="font-size:0.75rem;">
-      By logging in, you agree to our Terms & Privacy Policy
+    <!-- Register Link -->
+    <p class="text-center mt-2" style="font-size:0.82rem;">
+      Naya account?
+      <a href="#"
+        onclick="doRegister()"
+        style="color:var(--blue);font-weight:600;text-decoration:none;">
+        Register karo
+      </a>
     </p>
-  </div>
 
-  <div class="toast-msg"></div>
+    <!-- Terms -->
+    <p class="text-muted text-center mt-1" style="font-size:0.72rem;">
+      Login karke aap hamare Terms aur Privacy Policy se agree karte hain.
+    </p>
 
-  <!-- ================================================
-       BOOTSTRAP 5 CDN
-  ================================================ -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap Alert yahan inject hoga (auth.js karegi) -->
 
-  <!-- ================================================
-       FIREBASE SDK (v10 - CDN compat mode)
-  ================================================ -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js"></script>
+  </div><!-- /login-card -->
 
   <!-- ================================================
-       FIREBASE INITIALIZATION
+       SCRIPTS — Order bahut zaroori hai
   ================================================ -->
-  <script>
-    const firebaseConfig = {
-      apiKey:            "AIzaSyAngOxc99dsVId7JS08IiVWcq4sA5NsDR4",
-      authDomain:        "gemini-prompt-8e465.firebaseapp.com",
-      projectId:         "gemini-prompt-8e465",
-      storageBucket:     "gemini-prompt-8e465.firebasestorage.app",
-      messagingSenderId: "994008586611",
-      appId:             "1:994008586611:web:304aec118fe52eeb17cd06",
-      measurementId:     "G-EYQL3DWSXW"
-    };
 
-    // Initialize Firebase
-    const firebaseApp = firebase.initializeApp(firebaseConfig);
-    const analytics   = firebase.analytics();
-
-    console.log("✅ Firebase initialized — Aya Hospital");
+  <!-- 1. Bootstrap JS — pehle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
   </script>
 
-  <!-- ================================================
-       APP JS (localStorage helpers, navigation)
-  ================================================ -->
-  <script src="app.js"></script>
+  <!-- 2. Firebase Config — Auth initialize hoga -->
+  <script type="module" src="firebase-config.js"></script>
 
-  <!-- ================================================
-       LOGIN LOGIC
-  ================================================ -->
-  <script>
-    // If already logged in, skip to home
-    if (getUser()) window.location.href = 'home.html';
-
-    function doLogin() {
-      const email    = document.getElementById('email').value.trim();
-      const name     = document.getElementById('name').value.trim();
-      const password = document.getElementById('password').value;
-
-      if (!email || !name || !password) {
-        showToast('⚠️ Please fill all fields'); return;
-      }
-      if (!email.includes('@')) {
-        showToast('⚠️ Enter a valid email'); return;
-      }
-      if (password.length < 4) {
-        showToast('⚠️ Password too short'); return;
-      }
-
-      setUser({ name, email });
-      showToast('✅ Welcome, ' + name + '!');
-      setTimeout(() => { window.location.href = 'home.html'; }, 800);
-    }
-
-    // Allow Enter key to submit
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Enter') doLogin();
-    });
-  </script>
+  <!-- 3. Auth JS — Login/Register logic -->
+  <script type="module" src="auth.js"></script>
 
 </body>
 </html>
