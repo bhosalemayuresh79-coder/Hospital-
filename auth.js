@@ -13,12 +13,11 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
 // ══════════════════════════════════════════════════
-//   SECTION 1 — Bootstrap Alert Helper
-//   (Login card ke andar alert dikhata hai)
+//   SECTION 1 — Login Card Alert
+//   (Login form ke neeche dikhata hai)
 // ══════════════════════════════════════════════════
 
-function showAlert(message, type = 'danger') {
-  // Purana alert hatao pehle
+function showLoginAlert(message, type = 'danger') {
   const existing = document.getElementById('authAlert');
   if (existing) existing.remove();
 
@@ -39,15 +38,10 @@ function showAlert(message, type = 'danger') {
       data-bs-dismiss="alert" aria-label="Close"></button>
   `;
 
-  // Login card ke andar daalo
   const card = document.querySelector('.login-card');
-  if (card) {
-    card.appendChild(alertDiv);
-  } else {
-    document.body.appendChild(alertDiv);
-  }
+  if (card) card.appendChild(alertDiv);
+  else document.body.appendChild(alertDiv);
 
-  // 5 second baad apne aap hatega
   setTimeout(() => {
     if (alertDiv && alertDiv.parentNode) {
       alertDiv.classList.remove('show');
@@ -57,8 +51,30 @@ function showAlert(message, type = 'danger') {
 }
 
 // ══════════════════════════════════════════════════
-//   SECTION 2 — Firebase Error Codes
-//   (Samajhne layak messages mein badlo)
+//   SECTION 2 — Register Modal Alert
+//   (Modal ke andar dikhata hai)
+// ══════════════════════════════════════════════════
+
+function showRegisterAlert(message, type = 'danger') {
+  const box = document.getElementById('registerAlertBox');
+  if (!box) return;
+
+  box.innerHTML = `
+    <div class="alert alert-${type} alert-dismissible fade show"
+      role="alert"
+      style="border-radius:10px;font-family:'Poppins',sans-serif;
+      font-size:0.84rem;font-weight:500;margin-bottom:14px;">
+      ${message}
+      <button type="button" class="btn-close"
+        data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  `;
+
+  setTimeout(() => { box.innerHTML = ''; }, 5000);
+}
+
+// ══════════════════════════════════════════════════
+//   SECTION 3 — Firebase Error Messages
 // ══════════════════════════════════════════════════
 
 function getErrorMessage(errorCode) {
@@ -68,7 +84,7 @@ function getErrorMessage(errorCode) {
     'auth/wrong-password':
       '❌ <strong>Password galat hai.</strong> Dobara try karo.',
     'auth/invalid-email':
-      '❌ <strong>Email format sahi nahi hai.</strong> Sahi email daalo.',
+      '❌ <strong>Email format sahi nahi hai.</strong>',
     'auth/invalid-credential':
       '❌ <strong>Email ya Password galat hai.</strong> Dobara check karo.',
     'auth/user-disabled':
@@ -89,12 +105,11 @@ function getErrorMessage(errorCode) {
   return errors[errorCode]
     || `❌ <strong>Kuch galat hua.</strong> (${errorCode})`;
 }
-
 // ══════════════════════════════════════════════════
-//   SECTION 3 — Button Loading State
+//   SECTION 4 — Login Button Loading State
 // ══════════════════════════════════════════════════
 
-function setButtonLoading(isLoading) {
+function setLoginLoading(isLoading) {
   const btn = document.getElementById('loginBtn');
   if (!btn) return;
   if (isLoading) {
@@ -112,143 +127,173 @@ function setButtonLoading(isLoading) {
 }
 
 // ══════════════════════════════════════════════════
-//   SECTION 4 — Form Validation
+//   SECTION 5 — Register Button Loading State
 // ══════════════════════════════════════════════════
 
-function validateForm(email, name, password) {
-  if (!email || !name || !password) {
-    showAlert(
-      '⚠️ <strong>Sabhi fields bharna zaroori hai.</strong> Email, Naam aur Password daalo.',
-      'warning'
-    );
-    return false;
+function setRegisterLoading(isLoading) {
+  const btn = document.getElementById('registerBtn');
+  if (!btn) return;
+  if (isLoading) {
+    btn.disabled = true;
+    btn.innerHTML = `
+      <span class="spinner-border spinner-border-sm"
+        role="status" aria-hidden="true"
+        style="margin-right:8px;"></span>
+      Account ban raha hai...
+    `;
+  } else {
+    btn.disabled = false;
+    btn.textContent = '✅ Account Banao';
   }
-  if (!email.includes('@') || !email.includes('.')) {
-    showAlert(
-      '⚠️ <strong>Email sahi nahi hai.</strong> Valid email daalo (jaise: abc@gmail.com)',
-      'warning'
-    );
-    return false;
-  }
-  if (password.length < 6) {
-    showAlert(
-      '⚠️ <strong>Password bahut chhota hai.</strong> Kam se kam 6 characters chahiye.',
-      'warning'
-    );
-    return false;
-  }
-  return true;
 }
 
 // ══════════════════════════════════════════════════
-//   SECTION 5 — MAIN LOGIN FUNCTION
-//   (Login button click hone par chalega)
+//   SECTION 6 — MAIN LOGIN FUNCTION
 // ══════════════════════════════════════════════════
 
 async function doLogin() {
-  // Form fields ki values lo
   const email    = document.getElementById('email')?.value.trim();
   const name     = document.getElementById('name')?.value.trim();
   const password = document.getElementById('password')?.value;
 
-  // Validation check
-  if (!validateForm(email, name, password)) return;
-
-  // Button ko loading mein daalo
-  setButtonLoading(true);
-
-  try {
-    // ── Firebase se login karo ───────────────────
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
+  // ── Validation ──────────────────────────────────
+  if (!email || !name || !password) {
+    showLoginAlert(
+      '⚠️ <strong>Sabhi fields bharna zaroori hai.</strong> Email, Naam aur Password daalo.',
+      'warning'
     );
-
-    const firebaseUser = userCredential.user;
-
-    // ── User data localStorage mein save karo ────
-    const userData = {
-      name:  name,
-      email: firebaseUser.email,
-      uid:   firebaseUser.uid,
-    };
-    localStorage.setItem('ayaUser', JSON.stringify(userData));
-
-    // ── Success alert dikhao ─────────────────────
-    showAlert(
-      `✅ <strong>Login successful!</strong><br>
-       <small>Welcome back, <strong>${name}</strong>!
-       Home page par ja raha hai...</small>`,
-      'success'
-    );
-
-    console.log('✅ Login OK | UID:', firebaseUser.uid,
-                '| Project: hospital-170a2');
-
-    // ── 1.2 second baad home.html pe redirect ────
-    setTimeout(() => {
-      window.location.href = 'home.html';
-    }, 1200);
-
-  } catch (error) {
-    // ── Firebase error ───────────────────────────
-    console.error('❌ Login failed:', error.code);
-    showAlert(getErrorMessage(error.code), 'danger');
-    setButtonLoading(false);
+    return;
   }
-}
+  if (!email.includes('@')) {
+    showLoginAlert(
+      '⚠️ <strong>Email sahi nahi hai.</strong> Valid email daalo.',
+      'warning'
+    );
+    return;
+  }
+  if (password.length < 6) {
+    showLoginAlert(
+      '⚠️ <strong>Password bahut chhota hai.</strong> 6+ characters chahiye.',
+      'warning'
+    );
+    return;
+  }
 
-// ══════════════════════════════════════════════════
-//   SECTION 6 — REGISTER FUNCTION
-//   (Naya account banana ho tab)
-// ══════════════════════════════════════════════════
-
-async function doRegister() {
-  const email    = document.getElementById('email')?.value.trim();
-  const name     = document.getElementById('name')?.value.trim();
-  const password = document.getElementById('password')?.value;
-
-  if (!validateForm(email, name, password)) return;
-
-  setButtonLoading(true);
+  setLoginLoading(true);
 
   try {
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
+    // ── Firebase Login ───────────────────────────
+    const userCredential = await signInWithEmailAndPassword(
+      auth, email, password
     );
-
     const firebaseUser = userCredential.user;
 
+    // ── localStorage mein save ───────────────────
     localStorage.setItem('ayaUser', JSON.stringify({
       name:  name,
       email: firebaseUser.email,
       uid:   firebaseUser.uid,
     }));
 
-    showAlert(
-      `✅ <strong>Account ban gaya!</strong><br>
-       <small>Welcome, <strong>${name}</strong>!
-       Home page par ja raha hai...</small>`,
+    showLoginAlert(
+      `✅ <strong>Login successful!</strong>
+       Welcome, <strong>${name}</strong>! Redirect ho raha hai...`,
       'success'
     );
+
+    console.log('✅ Login OK | UID:', firebaseUser.uid);
 
     setTimeout(() => {
       window.location.href = 'home.html';
     }, 1200);
 
   } catch (error) {
-    console.error('❌ Register failed:', error.code);
-    showAlert(getErrorMessage(error.code), 'danger');
-    setButtonLoading(false);
+    console.error('❌ Login error:', error.code);
+    showLoginAlert(getErrorMessage(error.code), 'danger');
+    setLoginLoading(false);
   }
 }
 
 // ══════════════════════════════════════════════════
-//   SECTION 7 — LOGOUT FUNCTION
-//   (Profile page ya dusri jagah se call hogi)
+//   SECTION 7 — REGISTER FUNCTION
+//   Success hone par patient.html pe jayega
+// ══════════════════════════════════════════════════
+
+async function doRegister() {
+  const name            = document.getElementById('regName')?.value.trim();
+  const email           = document.getElementById('regEmail')?.value.trim();
+  const password        = document.getElementById('regPassword')?.value;
+  const confirmPassword = document.getElementById('regConfirmPassword')?.value;
+
+  // ── Validation ──────────────────────────────────
+  if (!name || !email || !password || !confirmPassword) {
+    showRegisterAlert(
+      '⚠️ <strong>Sabhi fields bharna zaroori hai.</strong>',
+      'warning'
+    );
+    return;
+  }
+  if (!email.includes('@')) {
+    showRegisterAlert(
+      '⚠️ <strong>Email sahi nahi hai.</strong>',
+      'warning'
+    );
+    return;
+  }
+  if (password.length < 6) {
+    showRegisterAlert(
+      '⚠️ <strong>Password kam se kam 6 characters ka hona chahiye.</strong>',
+      'warning'
+    );
+    return;
+  }
+  if (password !== confirmPassword) {
+    showRegisterAlert(
+      '❌ <strong>Dono passwords match nahi kar rahe.</strong> Dobara check karo.',
+      'danger'
+    );
+    return;
+  }
+
+  setRegisterLoading(true);
+
+  try {
+    // ── Firebase Register ────────────────────────
+    const userCredential = await createUserWithEmailAndPassword(
+      auth, email, password
+    );
+    const firebaseUser = userCredential.user;
+
+    // ── localStorage mein save ───────────────────
+    localStorage.setItem('ayaUser', JSON.stringify({
+      name:  name,
+      email: firebaseUser.email,
+      uid:   firebaseUser.uid,
+    }));
+
+    showRegisterAlert(
+      `✅ <strong>Account ban gaya!</strong>
+       Welcome, <strong>${name}</strong>!
+       Patient form par ja raha hai...`,
+      'success'
+    );
+
+    console.log('✅ Register OK | UID:', firebaseUser.uid);
+
+    // ── Patient.html pe redirect ─────────────────
+    setTimeout(() => {
+      window.location.href = 'patient.html';
+    }, 1500);
+
+  } catch (error) {
+    console.error('❌ Register error:', error.code);
+    showRegisterAlert(getErrorMessage(error.code), 'danger');
+    setRegisterLoading(false);
+  }
+}
+// ══════════════════════════════════════════════════
+//   SECTION 8 — LOGOUT FUNCTION
+//   (Profile page se call hogi)
 // ══════════════════════════════════════════════════
 
 async function doLogout() {
@@ -263,9 +308,8 @@ async function doLogout() {
 }
 
 // ══════════════════════════════════════════════════
-//   SECTION 8 — AUTH STATE OBSERVER
-//   Agar user pehle se logged in hai toh
-//   seedha home.html pe bhejo
+//   SECTION 9 — AUTH STATE OBSERVER
+//   Pehle se logged in hai toh home.html pe bhejo
 // ══════════════════════════════════════════════════
 
 onAuthStateChanged(auth, (user) => {
@@ -276,17 +320,26 @@ onAuthStateChanged(auth, (user) => {
 });
 
 // ══════════════════════════════════════════════════
-//   SECTION 9 — ENTER KEY SUPPORT
+//   SECTION 10 — ENTER KEY SUPPORT
 // ══════════════════════════════════════════════════
 
 document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') doLogin();
+    if (e.key === 'Enter') {
+      // Modal khula hua hai toh register karo
+      const modal = document.getElementById('registerModal');
+      const isOpen = modal?.classList.contains('show');
+      if (isOpen) {
+        doRegister();
+      } else {
+        doLogin();
+      }
+    }
   });
 });
 
 // ══════════════════════════════════════════════════
-//   SECTION 10 — WINDOW PE EXPOSE KARO
+//   SECTION 11 — WINDOW PE EXPOSE KARO
 //   (HTML ke onclick="" se call hone ke liye)
 // ══════════════════════════════════════════════════
 
