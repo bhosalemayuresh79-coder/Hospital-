@@ -13,13 +13,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet" />
 
-  <!-- Shared CSS -->
+  <!-- Shared CSS — purana design yahan se aata hai -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="login-page">
 
   <!-- ================================================
-       LOGIN CARD — Purana UI bilkul same
+       LOGIN CARD
+       Bilkul pehle jaisa — centered card, white bg,
+       logo upar, fields, button, shadow
   ================================================ -->
   <div class="login-card">
 
@@ -30,7 +32,7 @@
       <p>Aapki Seva Yahi Humara Kartavya</p>
     </div>
 
-    <!-- Email Field -->
+    <!-- Email Field — id="email" -->
     <div class="form-group">
       <label for="email">Email Address</label>
       <input
@@ -42,7 +44,7 @@
       />
     </div>
 
-    <!-- Name Field -->
+    <!-- Name Field — id="name" -->
     <div class="form-group">
       <label for="name">Your Name</label>
       <input
@@ -54,7 +56,7 @@
       />
     </div>
 
-    <!-- Password Field -->
+    <!-- Password Field — id="password" -->
     <div class="form-group">
       <label for="password">Password</label>
       <input
@@ -66,7 +68,7 @@
       />
     </div>
 
-    <!-- Login Button — id="loginBtn" zaroori hai -->
+    <!-- Login Button — id="loginBtn" zaroori hai spinner ke liye -->
     <button
       id="loginBtn"
       class="btn-primary mt-2"
@@ -74,8 +76,9 @@
       Login →
     </button>
 
-    <!-- Create Account Link -->
-    <p class="text-center mt-2" style="font-size:0.84rem;color:var(--text-muted);">
+    <!-- Register Link — Modal kholta hai -->
+    <p class="text-center mt-2"
+      style="font-size:0.84rem;color:var(--text-muted);">
       Naya account banana hai?
       <a
         href="#"
@@ -91,12 +94,13 @@
       By logging in, you agree to our Terms &amp; Privacy Policy
     </p>
 
-    <!-- Alert yahan inject hoga auth.js se -->
+    <!-- Login Alert — auth.js yahan inject karega -->
 
   </div><!-- /login-card -->
   <!-- ================================================
-       REGISTER MODAL — Bootstrap Modal
+       REGISTER MODAL
        "Register karo" click karne par khulega
+       Bootstrap Modal — purane UI style mein
   ================================================ -->
   <div
     class="modal fade"
@@ -135,15 +139,15 @@
         </div>
 
         <!-- Modal Body -->
-        <div class="modal-body" style="padding: 22px;">
+        <div class="modal-body" style="padding:22px;">
 
-          <!-- Register Alert — yahan aayega -->
+          <!-- Register Alert Box — auth.js yahan inject karega -->
           <div id="registerAlertBox"></div>
 
           <!-- Full Name -->
           <div class="form-group">
-            <label for="regName"
-              style="font-size:0.78rem;font-weight:600;
+            <label for="regName" style="
+              font-size:0.78rem;font-weight:600;
               color:var(--text-muted);text-transform:uppercase;
               letter-spacing:0.4px;display:block;margin-bottom:5px;">
               Full Name
@@ -158,8 +162,8 @@
 
           <!-- Email -->
           <div class="form-group" style="margin-top:12px;">
-            <label for="regEmail"
-              style="font-size:0.78rem;font-weight:600;
+            <label for="regEmail" style="
+              font-size:0.78rem;font-weight:600;
               color:var(--text-muted);text-transform:uppercase;
               letter-spacing:0.4px;display:block;margin-bottom:5px;">
               Email Address
@@ -174,8 +178,8 @@
 
           <!-- Password -->
           <div class="form-group" style="margin-top:12px;">
-            <label for="regPassword"
-              style="font-size:0.78rem;font-weight:600;
+            <label for="regPassword" style="
+              font-size:0.78rem;font-weight:600;
               color:var(--text-muted);text-transform:uppercase;
               letter-spacing:0.4px;display:block;margin-bottom:5px;">
               Password
@@ -190,8 +194,8 @@
 
           <!-- Confirm Password -->
           <div class="form-group" style="margin-top:12px;">
-            <label for="regConfirmPassword"
-              style="font-size:0.78rem;font-weight:600;
+            <label for="regConfirmPassword" style="
+              font-size:0.78rem;font-weight:600;
               color:var(--text-muted);text-transform:uppercase;
               letter-spacing:0.4px;display:block;margin-bottom:5px;">
               Confirm Password
@@ -208,13 +212,12 @@
 
         <!-- Modal Footer -->
         <div class="modal-footer" style="
-          border: none;
-          padding: 0 22px 22px;
-          flex-direction: column;
-          gap: 10px;
+          border:none;
+          padding:0 22px 22px;
+          flex-direction:column;
+          gap:10px;
         ">
-
-          <!-- Register Button -->
+          <!-- Register Button — id="registerBtn" spinner ke liye -->
           <button
             id="registerBtn"
             class="btn-primary"
@@ -239,15 +242,15 @@
   </div><!-- /registerModal -->
 
   <!-- ================================================
-       SCRIPTS — Sahi order mein
+       SCRIPTS — Sahi order mein — teen hi chahiye
   ================================================ -->
 
-  <!-- 1. Bootstrap JS -->
+  <!-- 1. Bootstrap JS — pehle -->
   <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
   </script>
 
-  <!-- 2. Firebase Config — pehle load hogi -->
+  <!-- 2. Firebase Config — Auth initialize hoga -->
   <script type="module" src="firebase-config.js"></script>
 
   <!-- 3. Auth JS — Login + Register logic -->
