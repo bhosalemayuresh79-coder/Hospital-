@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aya Hospital — Appointments</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -15,7 +19,6 @@
 
   <div class="page-content">
 
-    <!-- Booking Form -->
     <div class="section-title">Book Appointment</div>
     <div class="card">
 
@@ -61,11 +64,17 @@
       <div class="form-group">
         <label>Appointment Type</label>
         <div class="d-flex gap-2">
-          <label style="flex:1;display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:10px 12px;cursor:pointer;">
-            <input type="radio" name="apptType" value="In-person" checked /> In-person 🏥
+          <label style="flex:1;display:flex;align-items:center;gap:8px;
+            background:var(--bg);border:1.5px solid var(--border);
+            border-radius:9px;padding:10px 12px;cursor:pointer;">
+            <input type="radio" name="apptType"
+              value="In-person" checked /> In-person 🏥
           </label>
-          <label style="flex:1;display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:10px 12px;cursor:pointer;">
-            <input type="radio" name="apptType" value="Video Call" /> Video Call 📹
+          <label style="flex:1;display:flex;align-items:center;gap:8px;
+            background:var(--bg);border:1.5px solid var(--border);
+            border-radius:9px;padding:10px 12px;cursor:pointer;">
+            <input type="radio" name="apptType"
+              value="Video Call" /> Video Call 📹
           </label>
         </div>
       </div>
@@ -73,59 +82,107 @@
       <div class="form-group">
         <label>Reason for Visit</label>
         <textarea id="apptReason" class="form-control" rows="3"
-          placeholder="Briefly describe your symptoms or reason…"></textarea>
+          placeholder="Briefly describe your symptoms…"></textarea>
       </div>
 
-      <button class="btn-primary" onclick="bookAppointment()">✅ Book Appointment</button>
+      <button class="btn-primary" onclick="bookAppointment()">
+        ✅ Book Appointment
+      </button>
     </div>
 
-    <!-- Upcoming Appointments -->
     <div class="section-title">Upcoming Appointments</div>
     <div id="apptList">
-      <p class="text-muted text-center" style="padding:20px 0;">No appointments booked yet.</p>
+      <p class="text-muted text-center" style="padding:20px 0;">
+        No appointments booked yet.</p>
     </div>
 
-  </div>
+  </div><!-- /page-content -->
+  <!-- BOTTOM TAB BAR -->
+  <nav class="tab-bar">
+    <a href="home.html" class="tab-item">
+      <span class="icon">🏠</span>
+      <span>Home</span>
+    </a>
+    <a href="patient.html" class="tab-item">
+      <span class="icon">📋</span>
+      <span>Patient</span>
+    </a>
+    <a href="emergency.html" class="tab-item emergency-tab">
+      <span class="icon">🚨</span>
+      <span>Emergency</span>
+    </a>
+    <a href="appointment.html" class="tab-item active">
+      <span class="icon">📅</span>
+      <span>Appt</span>
+    </a>
+    <a href="profile.html" class="tab-item">
+      <span class="icon">👤</span>
+      <span>Profile</span>
+    </a>
+  </nav>
 
-  <!-- Tab Bar -->
-  <div id="tabBar"></div>
   <div class="toast-msg"></div>
 
-  <script src="app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+  </script>
   <script>
-    requireAuth();
-    document.getElementById('tabBar').innerHTML = buildTabBar('appointment');
+    // Auth Check
+    const userData = JSON.parse(localStorage.getItem('ayaUser') || 'null');
+    if (!userData) { window.location.href = 'index.html'; }
+
+    // Dark Mode
+    if (localStorage.getItem('ayaDarkMode') === 'true') {
+      document.body.classList.add('dark-mode');
+    }
 
     // Pre-fill patient name
-    const patient = getPatient();
-    const user = getUser();
-    const patientName = (patient && patient.fullName) || (user && user.name) || '';
+    const patient = JSON.parse(localStorage.getItem('ayaPatient') || 'null');
+    const patientName = (patient && patient.fullName) ||
+                        (userData && userData.name) || '';
     document.getElementById('apptPatient').value = patientName;
 
-    // Set min date to today
+    // Min date today
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('apptDate').setAttribute('min', today);
+
+    // Format date
+    function formatDate(isoStr) {
+      if (!isoStr) return '—';
+      return new Date(isoStr).toLocaleDateString('en-IN', {
+        day: 'numeric', month: 'short', year: 'numeric'
+      });
+    }
 
     // Render appointments
     function renderAppointments() {
       const list = document.getElementById('apptList');
-      const appts = getAppointments();
+      const appts = JSON.parse(
+        localStorage.getItem('ayaAppointments') || '[]'
+      );
       if (!appts.length) {
-        list.innerHTML = '<p class="text-muted text-center" style="padding:20px 0;">No appointments booked yet.</p>';
+        list.innerHTML = `<p class="text-muted text-center"
+          style="padding:20px 0;">No appointments booked yet.</p>`;
         return;
       }
       list.innerHTML = appts.map(a => `
         <div class="appt-card">
-          <div class="d-flex justify-between align-center">
+          <div style="display:flex;justify-content:space-between;
+            align-items:center;">
             <div>
               <div class="appt-doc">👨‍⚕️ ${a.doctor}</div>
-              <div class="appt-meta">📅 ${formatDate(a.date)} &nbsp;•&nbsp; ⏰ ${a.slot}</div>
+              <div class="appt-meta">
+                📅 ${formatDate(a.date)} &nbsp;•&nbsp; ⏰ ${a.slot}</div>
               <div class="appt-meta">🏷️ ${a.type}</div>
-              ${a.reason ? `<div class="appt-meta mt-1">📝 ${a.reason}</div>` : ''}
+              ${a.reason
+                ? `<div class="appt-meta mt-1">📝 ${a.reason}</div>`
+                : ''}
             </div>
-            <span class="badge badge-blue">Upcoming</span>
+            <span style="background:var(--blue-light);color:var(--blue);
+              padding:3px 10px;border-radius:20px;font-size:0.7rem;
+              font-weight:600;">Upcoming</span>
           </div>
-          <button class="btn-cancel" onclick="cancelAppt('${a.id}')">✖ Cancel</button>
+          <button class="btn-cancel"
+            onclick="cancelAppt('${a.id}')">✖ Cancel</button>
         </div>
       `).join('');
     }
@@ -134,32 +191,44 @@
       const doctor = document.getElementById('apptDoctor').value;
       const date   = document.getElementById('apptDate').value;
       const slot   = document.getElementById('apptSlot').value;
-      const type   = document.querySelector('input[name="apptType"]:checked').value;
+      const type   = document.querySelector(
+        'input[name="apptType"]:checked').value;
       const reason = document.getElementById('apptReason').value.trim();
 
       if (!doctor || !date || !slot) {
-        showToast('⚠️ Please fill Doctor, Date, and Slot'); return;
+        alert('⚠️ Doctor, Date aur Slot zaroori hai!'); return;
       }
 
-      addAppointment({ doctor, date, slot, type, reason, patient: patientName });
-      showToast('✅ Appointment booked!');
-      renderAppointments();
+      const appts = JSON.parse(
+        localStorage.getItem('ayaAppointments') || '[]'
+      );
+      appts.unshift({
+        id: Date.now().toString(),
+        doctor, date, slot, type, reason,
+        patient: patientName
+      });
+      localStorage.setItem('ayaAppointments', JSON.stringify(appts));
 
-      // Reset
+      // Reset form
       document.getElementById('apptDoctor').value = '';
       document.getElementById('apptDate').value = '';
       document.getElementById('apptSlot').value = '';
       document.getElementById('apptReason').value = '';
+
+      renderAppointments();
     }
 
     function cancelAppt(id) {
       if (!confirm('Cancel this appointment?')) return;
-      cancelAppointment(id);
-      showToast('Appointment cancelled.');
+      const appts = JSON.parse(
+        localStorage.getItem('ayaAppointments') || '[]'
+      ).filter(a => a.id !== id);
+      localStorage.setItem('ayaAppointments', JSON.stringify(appts));
       renderAppointments();
     }
 
     renderAppointments();
   </script>
+
 </body>
 </html>
