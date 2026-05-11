@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aya Hospital — Profile</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -14,7 +18,9 @@
         <h1>👤 Profile</h1>
         <div class="tagline">Your health card</div>
       </div>
-      <button onclick="openSettings()" style="background:none;border:none;font-size:1.5rem;cursor:pointer;" title="Settings">⚙️</button>
+      <button onclick="openSettings()"
+        style="background:none;border:none;font-size:1.5rem;
+        cursor:pointer;" title="Settings">⚙️</button>
     </div>
   </header>
 
@@ -23,59 +29,79 @@
     <!-- Avatar & Name -->
     <div class="card text-center">
       <div class="avatar-circle" id="avatarCircle">?</div>
-      <div style="font-size:1.2rem;font-weight:700;" id="profileName">—</div>
+      <div style="font-size:1.2rem;font-weight:700;"
+        id="profileName">—</div>
       <div class="text-muted mt-1" id="profileEmail">—</div>
       <div class="mt-2">
-        <span class="badge badge-blue" id="bloodBadge">Blood Group: —</span>
+        <span class="badge badge-blue" id="bloodBadge">
+          Blood Group: —</span>
       </div>
     </div>
 
-    <!-- Patient Details -->
+    <!-- Personal Info -->
     <div class="section-title">Personal Information</div>
     <div class="card" id="personalInfo">
-      <p class="text-muted text-center">No patient data saved yet. <a href="patient.html">Add Details →</a></p>
+      <p class="text-muted text-center">
+        No patient data saved yet.
+        <a href="patient.html">Add Details →</a>
+      </p>
     </div>
 
-    <!-- Vitals Summary -->
+    <!-- Vitals -->
     <div class="section-title">Vitals (Last Saved)</div>
     <div class="card" id="vitalsSummary">
       <p class="text-muted text-center">No vitals recorded.</p>
     </div>
 
-    <!-- Appointments Count -->
+    <!-- Appointments -->
     <div class="section-title">Appointments</div>
     <div class="card d-flex justify-between align-center">
       <div>
-        <div class="fw-700" id="apptCount">0</div>
+        <div style="font-weight:700;font-size:1.1rem;"
+          id="apptCount">0</div>
         <div class="text-muted">Total Booked</div>
       </div>
-      <a href="appointment.html" class="btn-outline" style="width:auto;padding:9px 18px;font-size:0.82rem;">View All</a>
+      <a href="appointment.html"
+        style="background:transparent;color:var(--blue);
+        border:1.5px solid var(--blue);border-radius:10px;
+        padding:9px 18px;font-size:0.82rem;font-weight:600;
+        text-decoration:none;">
+        View All
+      </a>
     </div>
 
     <!-- Logout -->
     <div style="margin-top:24px;">
-      <button class="btn-danger" onclick="confirmLogout()">🚪 Logout</button>
+      <button class="btn-danger" onclick="confirmLogout()">
+        🚪 Logout
+      </button>
     </div>
-    <div style="text-align:center;margin-top:14px;font-size:0.7rem;color:var(--text-muted);">
+    <div style="text-align:center;margin-top:14px;
+      font-size:0.7rem;color:var(--text-muted);">
       Aya Hospital App • Version 1.0.0
     </div>
 
-  </div>
+  </div><!-- /page-content -->
 
-  <!-- Settings Panel Overlay -->
-  <div class="settings-overlay" id="settingsOverlay" onclick="closeSettings()"></div>
+  <!-- Settings Overlay -->
+  <div class="settings-overlay" id="settingsOverlay"
+    onclick="closeSettings()"></div>
 
   <!-- Settings Panel -->
   <div class="settings-panel" id="settingsPanel">
-    <div class="d-flex justify-between align-center" style="margin-bottom:20px;">
+    <div class="d-flex justify-between align-center"
+      style="margin-bottom:20px;">
       <div style="font-size:1.1rem;font-weight:700;">⚙️ Settings</div>
-      <button onclick="closeSettings()" style="background:none;border:none;font-size:1.3rem;cursor:pointer;">✕</button>
+      <button onclick="closeSettings()"
+        style="background:none;border:none;
+        font-size:1.3rem;cursor:pointer;">✕</button>
     </div>
 
     <div class="settings-row">
       <span>🌙 Dark Mode</span>
       <label class="toggle">
-        <input type="checkbox" id="darkToggle" onchange="toggleDark(this.checked)" />
+        <input type="checkbox" id="darkToggle"
+          onchange="toggleDark(this.checked)" />
         <span class="slider"></span>
       </label>
     </div>
@@ -90,7 +116,8 @@
 
     <div class="settings-row">
       <span>🌐 Language</span>
-      <select class="form-control" style="width:auto;padding:6px 10px;font-size:0.82rem;" onchange="saveLanguage(this.value)">
+      <select class="form-control"
+        style="width:auto;padding:6px 10px;font-size:0.82rem;">
         <option value="en">English</option>
         <option value="hi">हिंदी</option>
       </select>
@@ -101,62 +128,95 @@
       <span class="text-muted" style="font-size:0.82rem;">1.0.0</span>
     </div>
 
-    <div class="settings-row">
-      <span>🔒 Privacy Policy</span>
-      <span class="text-muted" style="font-size:0.82rem;">View →</span>
-    </div>
-
     <div style="margin-top:24px;">
-      <button class="btn-danger" onclick="confirmLogout()" style="font-size:0.88rem;padding:12px;">
+      <button class="btn-danger" onclick="confirmLogout()"
+        style="font-size:0.88rem;padding:12px;">
         🚪 Logout
       </button>
     </div>
   </div>
+  <!-- BOTTOM TAB BAR -->
+  <nav class="tab-bar">
+    <a href="home.html" class="tab-item">
+      <span class="icon">🏠</span>
+      <span>Home</span>
+    </a>
+    <a href="patient.html" class="tab-item">
+      <span class="icon">📋</span>
+      <span>Patient</span>
+    </a>
+    <a href="emergency.html" class="tab-item emergency-tab">
+      <span class="icon">🚨</span>
+      <span>Emergency</span>
+    </a>
+    <a href="appointment.html" class="tab-item">
+      <span class="icon">📅</span>
+      <span>Appt</span>
+    </a>
+    <a href="profile.html" class="tab-item active">
+      <span class="icon">👤</span>
+      <span>Profile</span>
+    </a>
+  </nav>
 
-  <!-- Tab Bar -->
-  <div id="tabBar"></div>
   <div class="toast-msg"></div>
 
-  <script src="app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+  </script>
   <script>
-    requireAuth();
-    document.getElementById('tabBar').innerHTML = buildTabBar('profile');
+    // Auth Check
+    const userData = JSON.parse(localStorage.getItem('ayaUser') || 'null');
+    if (!userData) { window.location.href = 'index.html'; }
 
-    const user    = getUser();
-    const patient = getPatient();
-    const appts   = getAppointments();
+    const patient = JSON.parse(localStorage.getItem('ayaPatient') || 'null');
+    const appts   = JSON.parse(localStorage.getItem('ayaAppointments') || '[]');
 
-    // Avatar & header
-    document.getElementById('avatarCircle').textContent = getInitials(user.name);
-    document.getElementById('profileName').textContent  = user.name;
-    document.getElementById('profileEmail').textContent = user.email;
-    document.getElementById('apptCount').textContent    = appts.length;
-
-    // Blood group badge
-    if (patient && patient.bloodGroup) {
-      document.getElementById('bloodBadge').textContent = 'Blood Group: ' + patient.bloodGroup;
+    // Avatar & Name
+    function getInitials(name) {
+      if (!name) return '?';
+      return name.trim().split(' ')
+        .map(w => w[0].toUpperCase()).slice(0, 2).join('');
     }
 
-    // Personal info
+    if (userData) {
+      document.getElementById('avatarCircle').textContent =
+        getInitials(userData.name);
+      document.getElementById('profileName').textContent = userData.name;
+      document.getElementById('profileEmail').textContent = userData.email;
+    }
+
+    document.getElementById('apptCount').textContent = appts.length;
+
+    // Blood Group
+    if (patient && patient.bloodGroup) {
+      document.getElementById('bloodBadge').textContent =
+        'Blood Group: ' + patient.bloodGroup;
+    }
+
+    // Personal Info
     if (patient) {
       document.getElementById('personalInfo').innerHTML = `
-        <div class="d-flex justify-between" style="padding:7px 0;border-bottom:1px solid var(--border);">
+        <div style="display:flex;justify-content:space-between;
+          padding:7px 0;border-bottom:1px solid var(--border);">
           <span class="text-muted" style="font-size:0.82rem;">Age</span>
-          <span class="fw-700">${patient.age || '—'} yrs</span>
+          <span style="font-weight:700;">${patient.age || '—'} yrs</span>
         </div>
-        <div class="d-flex justify-between" style="padding:7px 0;border-bottom:1px solid var(--border);">
+        <div style="display:flex;justify-content:space-between;
+          padding:7px 0;border-bottom:1px solid var(--border);">
           <span class="text-muted" style="font-size:0.82rem;">Gender</span>
-          <span class="fw-700">${patient.gender || '—'}</span>
+          <span style="font-weight:700;">${patient.gender || '—'}</span>
         </div>
-        <div class="d-flex justify-between" style="padding:7px 0;border-bottom:1px solid var(--border);">
+        <div style="display:flex;justify-content:space-between;
+          padding:7px 0;border-bottom:1px solid var(--border);">
           <span class="text-muted" style="font-size:0.82rem;">Contact</span>
-          <span class="fw-700">${patient.contact || '—'}</span>
+          <span style="font-weight:700;">${patient.contact || '—'}</span>
         </div>
-        <div class="d-flex justify-between" style="padding:7px 0;">
+        <div style="display:flex;justify-content:space-between;
+          padding:7px 0;">
           <span class="text-muted" style="font-size:0.82rem;">Address</span>
-          <span class="fw-700" style="text-align:right;max-width:60%;">${patient.address || '—'}</span>
-        </div>
-      `;
+          <span style="font-weight:700;text-align:right;max-width:60%;">
+            ${patient.address || '—'}</span>
+        </div>`;
     }
 
     // Vitals
@@ -165,27 +225,30 @@
       document.getElementById('vitalsSummary').innerHTML = `
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
           ${[
-            ['❤️ BP',   v.bp || '—'],
-            ['🌡️ Temp', v.temp ? v.temp + ' °F' : '—'],
-            ['💓 Pulse', v.pulse ? v.pulse + ' bpm' : '—'],
-            ['🩸 SpO2',  v.spo2 ? v.spo2 + '%' : '—'],
+            ['❤️ BP',    v.bp     || '—'],
+            ['🌡️ Temp', v.temp   ? v.temp + ' °F' : '—'],
+            ['💓 Pulse', v.pulse  ? v.pulse + ' bpm' : '—'],
+            ['🩸 SpO2',  v.spo2   ? v.spo2 + '%' : '—'],
             ['⚖️ Weight',v.weight ? v.weight + ' kg' : '—'],
             ['📏 Height',v.height ? v.height + ' cm' : '—'],
           ].map(([lbl, val]) => `
             <div style="background:var(--bg);border-radius:9px;padding:10px;">
-              <div style="font-size:0.75rem;color:var(--text-muted);">${lbl}</div>
-              <div style="font-weight:700;font-size:0.95rem;margin-top:3px;">${val}</div>
+              <div style="font-size:0.75rem;color:var(--text-muted);">
+                ${lbl}</div>
+              <div style="font-weight:700;font-size:0.95rem;margin-top:3px;">
+                ${val}</div>
             </div>
           `).join('')}
         </div>`;
     }
 
-    // Dark mode toggle state
-    document.getElementById('darkToggle').checked = isDarkMode();
+    // Settings
+    document.getElementById('darkToggle').checked =
+      localStorage.getItem('ayaDarkMode') === 'true';
 
-    // Language
-    const savedLang = localStorage.getItem('ayaLanguage') || 'en';
-    document.querySelector('select').value = savedLang;
+    if (localStorage.getItem('ayaDarkMode') === 'true') {
+      document.body.classList.add('dark-mode');
+    }
 
     function openSettings() {
       document.getElementById('settingsPanel').classList.add('open');
@@ -195,11 +258,17 @@
       document.getElementById('settingsPanel').classList.remove('open');
       document.getElementById('settingsOverlay').classList.remove('show');
     }
-    function toggleDark(val) { setDarkMode(val); }
-    function saveLanguage(val) { localStorage.setItem('ayaLanguage', val); }
+    function toggleDark(val) {
+      localStorage.setItem('ayaDarkMode', val);
+      document.body.classList.toggle('dark-mode', val);
+    }
     function confirmLogout() {
-      if (confirm('Are you sure you want to logout?')) logout();
+      if (confirm('Logout karna chahte ho?')) {
+        localStorage.clear();
+        window.location.href = 'index.html';
+      }
     }
   </script>
+
 </body>
 </html>
