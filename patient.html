@@ -4,7 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aya Hospital — Patient Details</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -16,22 +19,26 @@
 
   <div class="page-content">
 
+    <!-- SECTION 1 — Personal Information -->
     <div class="section-title">👤 Personal Information</div>
     <div class="card">
 
       <div class="form-group">
         <label>Full Name</label>
-        <input type="text" id="fullName" class="form-control" placeholder="Patient's full name" />
+        <input type="text" id="fullName" class="form-control"
+          placeholder="Patient's full name" />
       </div>
 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
         <div class="form-group">
           <label>Age</label>
-          <input type="number" id="age" class="form-control" placeholder="Years" min="0" max="120" />
+          <input type="number" id="age" class="form-control"
+            placeholder="Years" min="0" max="120" />
         </div>
         <div class="form-group">
           <label>Gender</label>
-          <select id="gender" class="form-control" onchange="checkGender()">
+          <select id="gender" class="form-control"
+            onchange="checkGender()">
             <option value="">Select</option>
             <option>Male</option>
             <option>Female</option>
@@ -53,7 +60,8 @@
         </div>
         <div class="form-group">
           <label>Contact Number</label>
-          <input type="tel" id="contact" class="form-control" placeholder="+91 XXXXX XXXXX" />
+          <input type="tel" id="contact" class="form-control"
+            placeholder="+91 XXXXX XXXXX" />
         </div>
       </div>
 
@@ -65,6 +73,7 @@
 
     </div>
 
+    <!-- SECTION 2 — Chief Complaint -->
     <div class="section-title">🤒 Chief Complaint</div>
     <div class="card">
 
@@ -94,16 +103,23 @@
       <div class="form-group">
         <label>Is it getting worse?</label>
         <div class="d-flex gap-2">
-          <label style="flex:1;display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:10px 12px;cursor:pointer;">
-            <input type="radio" name="worsening" value="Yes" /> Yes, worsening
+          <label style="flex:1;display:flex;align-items:center;gap:8px;
+            background:var(--bg);border:1.5px solid var(--border);
+            border-radius:9px;padding:10px 12px;cursor:pointer;">
+            <input type="radio" name="worsening" value="Yes" />
+            Yes, worsening
           </label>
-          <label style="flex:1;display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:10px 12px;cursor:pointer;">
-            <input type="radio" name="worsening" value="No" checked /> Stable / Better
+          <label style="flex:1;display:flex;align-items:center;gap:8px;
+            background:var(--bg);border:1.5px solid var(--border);
+            border-radius:9px;padding:10px 12px;cursor:pointer;">
+            <input type="radio" name="worsening" value="No" checked />
+            Stable / Better
           </label>
         </div>
       </div>
 
     </div>
+    <!-- SECTION 3 — Medical History -->
     <div class="section-title">🏥 Medical History</div>
     <div class="card">
 
@@ -127,33 +143,38 @@
 
     </div>
 
+    <!-- SECTION 4 — Family History -->
     <div class="section-title">👨‍👩‍👧 Family History</div>
     <div class="card">
       <p class="text-muted" style="margin-bottom:12px;font-size:0.8rem;">
         Does any immediate family member have these conditions?
       </p>
-
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <label style="display:flex;align-items:center;gap:8px;font-size:0.88rem;font-weight:500;">
+        <label style="display:flex;align-items:center;gap:8px;
+          font-size:0.88rem;font-weight:500;">
           <input type="checkbox" id="fhDiabetes" /> 🩸 Diabetes
         </label>
-        <label style="display:flex;align-items:center;gap:8px;font-size:0.88rem;font-weight:500;">
+        <label style="display:flex;align-items:center;gap:8px;
+          font-size:0.88rem;font-weight:500;">
           <input type="checkbox" id="fhBP" /> ❤️ High BP
         </label>
-        <label style="display:flex;align-items:center;gap:8px;font-size:0.88rem;font-weight:500;">
+        <label style="display:flex;align-items:center;gap:8px;
+          font-size:0.88rem;font-weight:500;">
           <input type="checkbox" id="fhHeart" /> 💓 Heart Disease
         </label>
-        <label style="display:flex;align-items:center;gap:8px;font-size:0.88rem;font-weight:500;">
+        <label style="display:flex;align-items:center;gap:8px;
+          font-size:0.88rem;font-weight:500;">
           <input type="checkbox" id="fhCancer" /> 🎗️ Cancer
         </label>
-        <label style="display:flex;align-items:center;gap:8px;font-size:0.88rem;font-weight:500;">
+        <label style="display:flex;align-items:center;gap:8px;
+          font-size:0.88rem;font-weight:500;">
           <input type="checkbox" id="fhKidney" /> 🫘 Kidney Disease
         </label>
-        <label style="display:flex;align-items:center;gap:8px;font-size:0.88rem;font-weight:500;">
+        <label style="display:flex;align-items:center;gap:8px;
+          font-size:0.88rem;font-weight:500;">
           <input type="checkbox" id="fhThyroid" /> 🦋 Thyroid
         </label>
       </div>
-
       <div class="form-group" style="margin-top:12px;">
         <label>Other Family History</label>
         <input type="text" id="fhOther" class="form-control"
@@ -161,6 +182,7 @@
       </div>
     </div>
 
+    <!-- SECTION 5 — Current Medications -->
     <div class="section-title">💊 Current Medications</div>
     <div class="card">
       <div class="form-group">
@@ -175,12 +197,14 @@
       </div>
     </div>
 
+    <!-- SECTION 6 — Vitals -->
     <div class="section-title">🩺 Vitals</div>
     <div class="card">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
         <div class="form-group">
           <label>Blood Pressure (mmHg)</label>
-          <input type="text" id="vBP" class="form-control" placeholder="e.g. 120/80" />
+          <input type="text" id="vBP" class="form-control"
+            placeholder="e.g. 120/80" />
         </div>
         <div class="form-group">
           <label>Temperature (°F)</label>
@@ -189,7 +213,8 @@
         </div>
         <div class="form-group">
           <label>Pulse Rate (bpm)</label>
-          <input type="number" id="vPulse" class="form-control" placeholder="e.g. 72" />
+          <input type="number" id="vPulse" class="form-control"
+            placeholder="e.g. 72" />
         </div>
         <div class="form-group">
           <label>SpO2 (%)</label>
@@ -198,14 +223,17 @@
         </div>
         <div class="form-group">
           <label>Weight (kg)</label>
-          <input type="number" id="vWeight" class="form-control" placeholder="e.g. 65" />
+          <input type="number" id="vWeight" class="form-control"
+            placeholder="e.g. 65" />
         </div>
         <div class="form-group">
           <label>Height (cm)</label>
-          <input type="number" id="vHeight" class="form-control" placeholder="e.g. 170" />
+          <input type="number" id="vHeight" class="form-control"
+            placeholder="e.g. 170" />
         </div>
       </div>
     </div>
+    <!-- SECTION 7 — Lab Reports -->
     <div class="section-title">🔬 Lab Reports</div>
     <div class="card">
       <p class="text-muted" style="margin-bottom:12px;font-size:0.8rem;">
@@ -218,6 +246,7 @@
       </button>
     </div>
 
+    <!-- SECTION 8 — Prescribed Medicines -->
     <div class="section-title">📝 Prescribed Medicines</div>
     <div class="card">
       <div id="medRows"></div>
@@ -227,37 +256,46 @@
       </button>
     </div>
 
+    <!-- SECTION 9 — Addiction -->
     <div class="section-title">🚬 Addiction / Substance Use</div>
     <div class="card">
-
       <div class="form-group">
         <label>Does patient use tobacco / alcohol / drugs?</label>
         <div class="d-flex gap-2">
-          <label style="flex:1;display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:10px 12px;cursor:pointer;">
+          <label style="flex:1;display:flex;align-items:center;gap:8px;
+            background:var(--bg);border:1.5px solid var(--border);
+            border-radius:9px;padding:10px 12px;cursor:pointer;">
             <input type="radio" name="addiction" value="Yes"
               onclick="toggleAddiction(true)" /> Yes
           </label>
-          <label style="flex:1;display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:10px 12px;cursor:pointer;">
+          <label style="flex:1;display:flex;align-items:center;gap:8px;
+            background:var(--bg);border:1.5px solid var(--border);
+            border-radius:9px;padding:10px 12px;cursor:pointer;">
             <input type="radio" name="addiction" value="No" checked
               onclick="toggleAddiction(false)" /> No
           </label>
         </div>
       </div>
-
       <div id="addictionDetails" style="display:none;">
         <div class="form-group">
           <label>Which substance(s)?</label>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
-            <label style="display:flex;align-items:center;gap:6px;font-size:0.88rem;">
-              <input type="checkbox" id="addTobacco" /> 🚬 Tobacco / Gutkha
+          <div style="display:grid;grid-template-columns:1fr 1fr;
+            gap:8px;margin-bottom:8px;">
+            <label style="display:flex;align-items:center;
+              gap:6px;font-size:0.88rem;">
+              <input type="checkbox" id="addTobacco" />
+              🚬 Tobacco / Gutkha
             </label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:0.88rem;">
+            <label style="display:flex;align-items:center;
+              gap:6px;font-size:0.88rem;">
               <input type="checkbox" id="addAlcohol" /> 🍺 Alcohol
             </label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:0.88rem;">
+            <label style="display:flex;align-items:center;
+              gap:6px;font-size:0.88rem;">
               <input type="checkbox" id="addSmoking" /> 🚭 Smoking
             </label>
-            <label style="display:flex;align-items:center;gap:6px;font-size:0.88rem;">
+            <label style="display:flex;align-items:center;
+              gap:6px;font-size:0.88rem;">
               <input type="checkbox" id="addDrugs" /> 💉 Drugs
             </label>
           </div>
@@ -275,9 +313,9 @@
           </div>
         </div>
       </div>
-
     </div>
 
+    <!-- SECTION 10 — Lifestyle -->
     <div class="section-title">🏃 Lifestyle</div>
     <div class="card">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
@@ -300,19 +338,25 @@
       <div class="form-group">
         <label>Diet Type</label>
         <div class="d-flex gap-2">
-          <label style="flex:1;display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:10px 12px;cursor:pointer;">
-            <input type="radio" name="diet" value="Vegetarian" checked /> 🥦 Vegetarian
+          <label style="flex:1;display:flex;align-items:center;gap:8px;
+            background:var(--bg);border:1.5px solid var(--border);
+            border-radius:9px;padding:10px 12px;cursor:pointer;">
+            <input type="radio" name="diet"
+              value="Vegetarian" checked /> 🥦 Vegetarian
           </label>
-          <label style="flex:1;display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:10px 12px;cursor:pointer;">
-            <input type="radio" name="diet" value="Non-Vegetarian" /> 🍗 Non-Veg
+          <label style="flex:1;display:flex;align-items:center;gap:8px;
+            background:var(--bg);border:1.5px solid var(--border);
+            border-radius:9px;padding:10px 12px;cursor:pointer;">
+            <input type="radio" name="diet"
+              value="Non-Vegetarian" /> 🍗 Non-Veg
           </label>
         </div>
       </div>
     </div>
+    <!-- SECTION 11 — Women's Health -->
     <div id="womenSection" style="display:none;">
       <div class="section-title">🌸 Women's Health</div>
       <div class="card">
-
         <div class="form-group">
           <label>Pregnancy Status</label>
           <select id="pregnancy" class="form-control">
@@ -324,7 +368,6 @@
             <option>Postpartum (within 6 months)</option>
           </select>
         </div>
-
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
           <div class="form-group">
             <label>Last Menstrual Period</label>
@@ -336,25 +379,22 @@
               placeholder="e.g. 28" min="0" />
           </div>
         </div>
-
         <div class="form-group">
           <label>Menstrual Issues</label>
           <textarea id="menstrualIssues" class="form-control" rows="2"
-            placeholder="e.g. irregular cycles, heavy bleeding, PCOS…"></textarea>
+            placeholder="e.g. irregular cycles, PCOS…"></textarea>
         </div>
-
         <div class="form-group">
           <label>Number of Pregnancies (Gravida)</label>
           <input type="number" id="gravida" class="form-control"
             placeholder="0" min="0" />
         </div>
-
       </div>
     </div>
 
+    <!-- SECTION 12 — Mental Health -->
     <div class="section-title">🧠 Mental Health</div>
     <div class="card">
-
       <div class="form-group">
         <label>Stress Level (1–10)</label>
         <input type="range" id="stressLevel" min="1" max="10" value="4"
@@ -364,27 +404,30 @@
           <span id="stressVal">4</span> / 10
         </div>
       </div>
-
       <div class="form-group">
         <label>History of Anxiety / Depression</label>
         <div class="d-flex gap-2">
-          <label style="flex:1;display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:10px 12px;cursor:pointer;">
+          <label style="flex:1;display:flex;align-items:center;gap:8px;
+            background:var(--bg);border:1.5px solid var(--border);
+            border-radius:9px;padding:10px 12px;cursor:pointer;">
             <input type="radio" name="mentalHistory" value="Yes" /> Yes
           </label>
-          <label style="flex:1;display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:10px 12px;cursor:pointer;">
-            <input type="radio" name="mentalHistory" value="No" checked /> No
+          <label style="flex:1;display:flex;align-items:center;gap:8px;
+            background:var(--bg);border:1.5px solid var(--border);
+            border-radius:9px;padding:10px 12px;cursor:pointer;">
+            <input type="radio" name="mentalHistory"
+              value="No" checked /> No
           </label>
         </div>
       </div>
-
       <div class="form-group">
         <label>Mental Health Notes</label>
         <textarea id="mentalNotes" class="form-control" rows="2"
           placeholder="Any relevant mental health information…"></textarea>
       </div>
-
     </div>
 
+    <!-- Save Button -->
     <button class="btn-primary" style="margin-bottom:16px;"
       onclick="savePatient()">
       💾 Save Patient Record
@@ -392,32 +435,68 @@
 
   </div><!-- /page-content -->
 
-  <!-- ================================================
-       TAB BAR + TOAST
-  ================================================ -->
-  <div id="tabBar"></div>
+  <!-- BOTTOM TAB BAR — Seedha HTML mein -->
+  <nav class="tab-bar">
+    <a href="home.html" class="tab-item">
+      <span class="icon">🏠</span>
+      <span>Home</span>
+    </a>
+    <a href="patient.html" class="tab-item active">
+      <span class="icon">📋</span>
+      <span>Patient</span>
+    </a>
+    <a href="emergency.html" class="tab-item emergency-tab">
+      <span class="icon">🚨</span>
+      <span>Emergency</span>
+    </a>
+    <a href="appointment.html" class="tab-item">
+      <span class="icon">📅</span>
+      <span>Appt</span>
+    </a>
+    <a href="profile.html" class="tab-item">
+      <span class="icon">👤</span>
+      <span>Profile</span>
+    </a>
+  </nav>
+
   <div class="toast-msg"></div>
 
-  <!-- ================================================
-       BOOTSTRAP JS
-  ================================================ -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+  </script>
 
-  <!-- ================================================
-       FIREBASE CONFIG (pehle load hogi)
-  ================================================ -->
+  <!-- Firebase Config + App JS — module -->
   <script type="module" src="firebase-config.js"></script>
-
-  <!-- ================================================
-       APP JS — module mode (Firestore + helpers)
-  ================================================ -->
   <script type="module" src="app.js"></script>
-  <!-- ================================================
-       LOCAL FUNCTIONS — checkGender, toggleAddiction,
-       addLabRow, addMedRow (inline kyunki ye DOM se
-       directly call hoti hain via onclick)
-  ================================================ -->
+  <!-- Local functions — onclick se directly call hoti hain -->
   <script>
+    // Auth Check
+    const userData = JSON.parse(localStorage.getItem('ayaUser') || 'null');
+    if (!userData) { window.location.href = 'index.html'; }
+
+    // Dark Mode
+    if (localStorage.getItem('ayaDarkMode') === 'true') {
+      document.body.classList.add('dark-mode');
+    }
+
+    // Pre-fill name
+    const existingPatient = JSON.parse(
+      localStorage.getItem('ayaPatient') || 'null'
+    );
+    if (existingPatient) {
+      prefillForm(existingPatient);
+    } else if (userData) {
+      document.getElementById('fullName').value = userData.name || '';
+    }
+
+    // Default lab rows
+    ['CBC (Complete Blood Count)',
+     'Blood Sugar (Fasting)',
+     'Urine Routine'].forEach(name => addLabRow(name));
+
+    // Default medicine row
+    addMedRow();
+
     function checkGender() {
       const gender = document.getElementById('gender').value;
       document.getElementById('womenSection').style.display =
@@ -431,40 +510,49 @@
 
     function addLabRow(defaultName = '') {
       const container = document.getElementById('labRows');
-      const id = 'lab_' + Date.now() + Math.random().toString(36).slice(2, 5);
+      const id = 'lab_' + Date.now() +
+        Math.random().toString(36).slice(2, 5);
       const div = document.createElement('div');
       div.className = 'lab-row';
       div.id = id;
-      div.style.cssText = 'display:grid;grid-template-columns:2fr 1fr auto;gap:8px;margin-bottom:8px;align-items:center;';
+      div.style.cssText =
+        'display:grid;grid-template-columns:2fr 1fr auto;' +
+        'gap:8px;margin-bottom:8px;align-items:center;';
       div.innerHTML = `
         <input type="text" class="form-control lab-name"
-          placeholder="Test name (e.g. Hemoglobin)"
-          value="${defaultName}" style="margin-bottom:0;" />
+          placeholder="Test name" value="${defaultName}"
+          style="margin-bottom:0;" />
         <input type="text" class="form-control lab-value"
           placeholder="Result" style="margin-bottom:0;" />
         <button onclick="document.getElementById('${id}').remove()"
-          style="background:var(--red-light);color:var(--red);border:none;
-          border-radius:8px;padding:10px 12px;cursor:pointer;font-size:1rem;">✕</button>
+          style="background:var(--red-light);color:var(--red);
+          border:none;border-radius:8px;padding:10px 12px;
+          cursor:pointer;font-size:1rem;">✕</button>
       `;
       container.appendChild(div);
     }
 
     function addMedRow() {
       const container = document.getElementById('medRows');
-      const id = 'med_' + Date.now() + Math.random().toString(36).slice(2, 5);
+      const id = 'med_' + Date.now() +
+        Math.random().toString(36).slice(2, 5);
       const div = document.createElement('div');
       div.id = id;
-      div.style.cssText = 'background:var(--bg);border-radius:10px;padding:12px;margin-bottom:10px;border:1px solid var(--border);';
+      div.style.cssText =
+        'background:var(--bg);border-radius:10px;padding:12px;' +
+        'margin-bottom:10px;border:1px solid var(--border);';
       div.innerHTML = `
-        <div style="display:grid;grid-template-columns:1fr auto;gap:8px;
-          margin-bottom:8px;align-items:center;">
+        <div style="display:grid;grid-template-columns:1fr auto;
+          gap:8px;margin-bottom:8px;align-items:center;">
           <input type="text" class="form-control med-name"
             placeholder="Medicine name" style="margin-bottom:0;" />
           <button onclick="document.getElementById('${id}').remove()"
-            style="background:var(--red-light);color:var(--red);border:none;
-            border-radius:8px;padding:8px 11px;cursor:pointer;font-size:0.9rem;">✕</button>
+            style="background:var(--red-light);color:var(--red);
+            border:none;border-radius:8px;padding:8px 11px;
+            cursor:pointer;font-size:0.9rem;">✕</button>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;
+          gap:8px;">
           <input type="text" class="form-control med-dose"
             placeholder="Dosage (e.g. 500mg)" />
           <select class="form-control med-freq">
@@ -483,12 +571,184 @@
       container.appendChild(div);
     }
 
-    // Page load par default rows add karo
-    document.addEventListener('DOMContentLoaded', () => {
-      ['CBC (Complete Blood Count)', 'Blood Sugar (Fasting)', 'Urine Routine']
-        .forEach(name => addLabRow(name));
-      addMedRow();
-    });
+    function savePatient() {
+      const fullName = document.getElementById('fullName').value.trim();
+      if (!fullName) {
+        alert('⚠️ Full Name zaroori hai!'); return;
+      }
+      const gender = document.getElementById('gender').value;
+
+      // Collect lab reports
+      const labReports = [];
+      document.querySelectorAll('#labRows .lab-row').forEach(row => {
+        const name  = row.querySelector('.lab-name')?.value.trim();
+        const value = row.querySelector('.lab-value')?.value.trim();
+        if (name) labReports.push({ name, value: value || '—' });
+      });
+
+      // Collect medicines
+      const prescribedMedicines = [];
+      document.querySelectorAll(
+        '#medRows > div[id^="med_"]').forEach(row => {
+        const name = row.querySelector('.med-name')?.value.trim();
+        const dose = row.querySelector('.med-dose')?.value.trim();
+        const freq = row.querySelector('.med-freq')?.value;
+        const dur  = row.querySelector('.med-dur')?.value.trim();
+        if (name) prescribedMedicines.push({
+          name, dose: dose||'—', freq: freq||'—', dur: dur||'—'
+        });
+      });
+
+      const data = {
+        fullName,
+        age:        document.getElementById('age').value,
+        gender,
+        bloodGroup: document.getElementById('bloodGroup').value,
+        contact:    document.getElementById('contact').value,
+        address:    document.getElementById('address').value,
+        chiefComplaint: document.getElementById('chiefComplaint').value,
+        duration:   document.getElementById('duration').value,
+        severity:   document.getElementById('severity').value,
+        worsening:  document.querySelector(
+          'input[name="worsening"]:checked')?.value || '',
+        prevIllness: document.getElementById('prevIllness').value,
+        surgeries:   document.getElementById('surgeries').value,
+        hospitalizations:
+          document.getElementById('hospitalizations').value,
+        familyHistory: {
+          diabetes: document.getElementById('fhDiabetes').checked,
+          bp:       document.getElementById('fhBP').checked,
+          heart:    document.getElementById('fhHeart').checked,
+          cancer:   document.getElementById('fhCancer').checked,
+          kidney:   document.getElementById('fhKidney').checked,
+          thyroid:  document.getElementById('fhThyroid').checked,
+          other:    document.getElementById('fhOther').value,
+        },
+        currentMeds: document.getElementById('currentMeds').value,
+        allergies:   document.getElementById('allergies').value,
+        vitals: {
+          bp:     document.getElementById('vBP').value,
+          temp:   document.getElementById('vTemp').value,
+          pulse:  document.getElementById('vPulse').value,
+          spo2:   document.getElementById('vSpO2').value,
+          weight: document.getElementById('vWeight').value,
+          height: document.getElementById('vHeight').value,
+        },
+        labReports,
+        prescribedMedicines,
+        addiction: document.querySelector(
+          'input[name="addiction"]:checked')?.value || 'No',
+        addictionDetails: {
+          tobacco: document.getElementById('addTobacco').checked,
+          alcohol: document.getElementById('addAlcohol').checked,
+          smoking: document.getElementById('addSmoking').checked,
+          drugs:   document.getElementById('addDrugs').checked,
+          years:   document.getElementById('addYears').value,
+          qty:     document.getElementById('addQty').value,
+        },
+        sleep:    document.getElementById('sleep').value,
+        exercise: document.getElementById('exercise').value,
+        diet:     document.querySelector(
+          'input[name="diet"]:checked')?.value || '',
+        womenHealth: gender === 'Female' ? {
+          pregnancy:
+            document.getElementById('pregnancy').value,
+          lmp:     document.getElementById('lmp').value,
+          cycleLen:document.getElementById('cycleLen').value,
+          menstrualIssues:
+            document.getElementById('menstrualIssues').value,
+          gravida: document.getElementById('gravida').value,
+        } : null,
+        stressLevel:
+          document.getElementById('stressLevel').value,
+        mentalHistory: document.querySelector(
+          'input[name="mentalHistory"]:checked')?.value || '',
+        mentalNotes:
+          document.getElementById('mentalNotes').value,
+        savedAt: new Date().toISOString(),
+      };
+
+      localStorage.setItem('ayaPatient', JSON.stringify(data));
+
+      // Bootstrap success alert
+      const alertDiv = document.createElement('div');
+      alertDiv.className =
+        'alert alert-success alert-dismissible fade show';
+      alertDiv.style.cssText =
+        'position:fixed;top:16px;left:16px;right:16px;' +
+        'z-index:9999;border-radius:12px;' +
+        'font-family:Poppins,sans-serif;font-size:0.88rem;' +
+        'font-weight:500;box-shadow:0 4px 20px rgba(0,0,0,0.15);';
+      alertDiv.innerHTML = `
+        ✅ <strong>Patient record save ho gaya!</strong>
+        Patient: <strong>${fullName}</strong>
+        <button type="button" class="btn-close"
+          data-bs-dismiss="alert"></button>
+      `;
+      document.body.appendChild(alertDiv);
+      setTimeout(() => alertDiv.remove(), 3000);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function prefillForm(d) {
+      const s = (id, val) => {
+        const el = document.getElementById(id);
+        if (el && val !== undefined) el.value = val;
+      };
+      s('fullName', d.fullName); s('age', d.age);
+      s('gender', d.gender); s('bloodGroup', d.bloodGroup);
+      s('contact', d.contact); s('address', d.address);
+      s('chiefComplaint', d.chiefComplaint);
+      s('duration', d.duration); s('severity', d.severity);
+      if (d.severity)
+        document.getElementById('severityVal').textContent = d.severity;
+      s('prevIllness', d.prevIllness);
+      s('surgeries', d.surgeries);
+      s('hospitalizations', d.hospitalizations);
+      s('currentMeds', d.currentMeds);
+      s('allergies', d.allergies);
+      if (d.vitals) {
+        s('vBP', d.vitals.bp); s('vTemp', d.vitals.temp);
+        s('vPulse', d.vitals.pulse); s('vSpO2', d.vitals.spo2);
+        s('vWeight', d.vitals.weight); s('vHeight', d.vitals.height);
+      }
+      if (d.familyHistory) {
+        const fh = d.familyHistory;
+        ['Diabetes','BP','Heart','Cancer','Kidney','Thyroid']
+          .forEach(k => {
+            const el = document.getElementById('fh' + k);
+            if (el) el.checked = fh[k.toLowerCase()] || false;
+          });
+        s('fhOther', fh.other);
+      }
+      s('sleep', d.sleep); s('exercise', d.exercise);
+      s('stressLevel', d.stressLevel);
+      if (d.stressLevel)
+        document.getElementById('stressVal').textContent = d.stressLevel;
+      s('mentalNotes', d.mentalNotes);
+      if (d.gender === 'Female') checkGender();
+      if (d.womenHealth) {
+        const w = d.womenHealth;
+        s('pregnancy', w.pregnancy); s('lmp', w.lmp);
+        s('cycleLen', w.cycleLen);
+        s('menstrualIssues', w.menstrualIssues);
+        s('gravida', w.gravida);
+      }
+      if (d.addiction === 'Yes') {
+        const r = document.querySelector(
+          'input[name="addiction"][value="Yes"]');
+        if (r) r.checked = true;
+        toggleAddiction(true);
+        if (d.addictionDetails) {
+          const ad = d.addictionDetails;
+          ['Tobacco','Alcohol','Smoking','Drugs'].forEach(k => {
+            const el = document.getElementById('add' + k);
+            if (el) el.checked = ad[k.toLowerCase()] || false;
+          });
+          s('addYears', ad.years); s('addQty', ad.qty);
+        }
+      }
+    }
   </script>
 
 </body>
