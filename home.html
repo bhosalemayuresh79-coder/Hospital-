@@ -18,9 +18,7 @@
 </head>
 <body>
 
-  <!-- ================================================
-       TOP HEADER
-  ================================================ -->
+  <!-- TOP HEADER -->
   <header class="aya-header">
     <div class="d-flex justify-between align-center">
       <div>
@@ -32,9 +30,6 @@
     </div>
   </header>
 
-  <!-- ================================================
-       PAGE CONTENT
-  ================================================ -->
   <div class="page-content">
 
     <!-- Welcome Card -->
@@ -71,46 +66,16 @@
       </div>
     </div>
 
-    <!-- Quick Actions -->
-    <div class="section-title">Quick Actions</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;
-      gap:10px;margin-bottom:14px;">
-      <a href="patient.html" class="card"
-        style="text-decoration:none;text-align:center;padding:18px 10px;">
-        <div style="font-size:2rem;">📋</div>
-        <div style="font-size:0.82rem;font-weight:600;margin-top:6px;">
-          Add Patient</div>
-      </a>
-      <a href="appointment.html" class="card"
-        style="text-decoration:none;text-align:center;padding:18px 10px;">
-        <div style="font-size:2rem;">📅</div>
-        <div style="font-size:0.82rem;font-weight:600;margin-top:6px;">
-          Book Appt.</div>
-      </a>
-      <a href="emergency.html" class="card"
-        style="text-decoration:none;text-align:center;
-        padding:18px 10px;background:var(--red-light);">
-        <div style="font-size:2rem;">🚨</div>
-        <div style="font-size:0.82rem;font-weight:600;
-          margin-top:6px;color:var(--red);">Emergency</div>
-      </a>
-      <a href="profile.html" class="card"
-        style="text-decoration:none;text-align:center;padding:18px 10px;">
-        <div style="font-size:2rem;">👤</div>
-        <div style="font-size:0.82rem;font-weight:600;margin-top:6px;">
-          My Profile</div>
-      </a>
-    </div>
-
     <!-- Next Appointment -->
     <div class="section-title">Next Appointment</div>
     <div id="nextAppt" class="card">
       <p class="text-muted" style="text-align:center;">
         No upcoming appointments.</p>
     </div>
+
     <!-- Activity Feed -->
     <div class="section-title">Recent Activity</div>
-    <div class="card" id="activityFeed">
+    <div class="card">
 
       <div class="activity-item">
         <div class="activity-dot"></div>
@@ -146,86 +111,64 @@
         </div>
       </div>
 
-    </div><!-- /activityFeed -->
+    </div>
 
   </div><!-- /page-content -->
-
-  <!-- ================================================
-       BOTTOM TAB BAR — Seedha HTML mein likha hai
-       module import ki zaroorat nahi
-  ================================================ -->
+  <!-- BOTTOM TAB BAR — Seedha HTML mein -->
   <nav class="tab-bar">
-
     <a href="home.html" class="tab-item active">
       <span class="icon">🏠</span>
       <span>Home</span>
     </a>
-
     <a href="patient.html" class="tab-item">
       <span class="icon">📋</span>
       <span>Patient</span>
     </a>
-
     <a href="emergency.html" class="tab-item emergency-tab">
       <span class="icon">🚨</span>
       <span>Emergency</span>
     </a>
-
     <a href="appointment.html" class="tab-item">
       <span class="icon">📅</span>
       <span>Appt</span>
     </a>
-
     <a href="profile.html" class="tab-item">
       <span class="icon">👤</span>
       <span>Profile</span>
     </a>
-
   </nav>
 
   <div class="toast-msg"></div>
 
-  <!-- ================================================
-       BOOTSTRAP JS
-  ================================================ -->
+  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
   </script>
 
-  <!-- ================================================
-       INLINE SCRIPT — module nahi, seedha JS
-       Tab bar pehle se HTML mein hai isliye
-       sirf welcome name aur date chahiye
-  ================================================ -->
   <script>
-    // ── Auth Check ─────────────────────────────────
+    // Auth Check
     const userData = JSON.parse(localStorage.getItem('ayaUser') || 'null');
-    if (!userData) {
-      window.location.href = 'index.html';
-    }
+    if (!userData) { window.location.href = 'index.html'; }
 
-    // ── Welcome Name ───────────────────────────────
+    // Welcome Name
     if (userData) {
       document.getElementById('welcomeName').textContent =
         'Welcome, ' + userData.name + '!';
     }
 
-    // ── Header Date & Time ─────────────────────────
+    // Header Date
     const now = new Date();
     document.getElementById('headerDate').innerHTML =
       now.toLocaleDateString('en-IN', {
         weekday: 'short', day: 'numeric', month: 'short'
-      }) +
-      '<br>' +
+      }) + '<br>' +
       now.toLocaleTimeString('en-IN', {
         hour: '2-digit', minute: '2-digit'
       });
 
-    // ── Next Appointment ───────────────────────────
+    // Next Appointment
     const appts = JSON.parse(
       localStorage.getItem('ayaAppointments') || '[]'
     );
-    const nextApptEl = document.getElementById('nextAppt');
-
     if (appts.length > 0) {
       const a = appts[0];
       const dateStr = a.date
@@ -233,8 +176,9 @@
             day: 'numeric', month: 'short', year: 'numeric'
           })
         : '—';
-      nextApptEl.innerHTML = `
-        <div style="display:flex;justify-content:space-between;align-items:center;">
+      document.getElementById('nextAppt').innerHTML = `
+        <div style="display:flex;justify-content:space-between;
+          align-items:center;">
           <div>
             <div style="font-weight:700;">${a.doctor}</div>
             <div style="font-size:0.78rem;color:var(--text-muted);
@@ -242,9 +186,9 @@
               📅 ${dateStr} &nbsp;•&nbsp; ⏰ ${a.slot || '—'}
             </div>
             <div style="margin-top:6px;">
-              <span style="background:var(--blue-light);color:var(--blue);
-                padding:3px 10px;border-radius:20px;font-size:0.7rem;
-                font-weight:600;">
+              <span style="background:var(--blue-light);
+                color:var(--blue);padding:3px 10px;
+                border-radius:20px;font-size:0.7rem;font-weight:600;">
                 ${a.type || 'In-person'}
               </span>
             </div>
@@ -253,7 +197,7 @@
         </div>`;
     }
 
-    // ── Dark Mode ──────────────────────────────────
+    // Dark Mode
     if (localStorage.getItem('ayaDarkMode') === 'true') {
       document.body.classList.add('dark-mode');
     }
