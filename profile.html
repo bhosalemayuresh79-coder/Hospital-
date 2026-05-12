@@ -76,6 +76,7 @@
         🚪 Logout
       </button>
     </div>
+
     <div style="text-align:center;margin-top:14px;
       font-size:0.7rem;color:var(--text-muted);">
       Aya Hospital App • Version 1.0.0
@@ -86,17 +87,20 @@
   <!-- Settings Overlay -->
   <div class="settings-overlay" id="settingsOverlay"
     onclick="closeSettings()"></div>
-
-  <!-- Settings Panel -->
+    <!-- Settings Panel -->
   <div class="settings-panel" id="settingsPanel">
+
+    <!-- Settings Header -->
     <div class="d-flex justify-between align-center"
       style="margin-bottom:20px;">
-      <div style="font-size:1.1rem;font-weight:700;">⚙️ Settings</div>
+      <div style="font-size:1.1rem;font-weight:700;">
+        ⚙️ Settings</div>
       <button onclick="closeSettings()"
         style="background:none;border:none;
         font-size:1.3rem;cursor:pointer;">✕</button>
     </div>
 
+    <!-- Dark Mode -->
     <div class="settings-row">
       <span>🌙 Dark Mode</span>
       <label class="toggle">
@@ -106,6 +110,7 @@
       </label>
     </div>
 
+    <!-- Notifications -->
     <div class="settings-row">
       <span>🔔 Notifications</span>
       <label class="toggle">
@@ -114,6 +119,7 @@
       </label>
     </div>
 
+    <!-- Language -->
     <div class="settings-row">
       <span>🌐 Language</span>
       <select class="form-control"
@@ -123,18 +129,54 @@
       </select>
     </div>
 
+    <!-- App Version -->
     <div class="settings-row">
       <span>📱 App Version</span>
-      <span class="text-muted" style="font-size:0.82rem;">1.0.0</span>
+      <span class="text-muted" style="font-size:0.82rem;">
+        1.0.0</span>
     </div>
 
-    <div style="margin-top:24px;">
-      <button class="btn-danger" onclick="confirmLogout()"
-        style="font-size:0.88rem;padding:12px;">
-        🚪 Logout
+    <!-- ============================================
+         ADMIN PANEL BUTTON
+         Sirf bhosalemayuresh79@gmail.com ko dikhega
+    ============================================ -->
+    <div id="adminBtnContainer" style="display:none;">
+      <div class="settings-row" style="border:none;padding-top:16px;">
+        <span style="font-size:0.82rem;color:var(--text-muted);">
+          🔐 Admin Access</span>
+      </div>
+      <button
+        onclick="openAdminPanel()"
+        style="
+          width:100%;
+          background: linear-gradient(135deg, #1a73e8, #1558b0);
+          color: white;
+          border: none;
+          border-radius: 10px;
+          padding: 13px;
+          font-family: 'Poppins', sans-serif;
+          font-size: 0.92rem;
+          font-weight: 600;
+          cursor: pointer;
+          margin-bottom: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+        ">
+        ⚙️ Admin Panel
       </button>
     </div>
-  </div>
+
+    <!-- Logout — Admin Panel ke neeche -->
+    <button class="btn-danger"
+      onclick="confirmLogout()"
+      style="font-size:0.88rem;padding:12px;width:100%;">
+      🚪 Logout
+    </button>
+
+  </div><!-- /settingsPanel -->
+
   <!-- BOTTOM TAB BAR -->
   <nav class="tab-bar">
     <a href="home.html" class="tab-item">
@@ -160,108 +202,158 @@
   </nav>
 
   <div class="toast-msg"></div>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
   </script>
+
   <script>
-    // Auth Check
-    const userData = JSON.parse(localStorage.getItem('ayaUser') || 'null');
+    // ── Auth Check ──────────────────────────────────
+    const userData = JSON.parse(
+      localStorage.getItem('ayaUser') || 'null'
+    );
     if (!userData) { window.location.href = 'index.html'; }
 
-    const patient = JSON.parse(localStorage.getItem('ayaPatient') || 'null');
-    const appts   = JSON.parse(localStorage.getItem('ayaAppointments') || '[]');
+    const patient = JSON.parse(
+      localStorage.getItem('ayaPatient') || 'null'
+    );
+    const appts = JSON.parse(
+      localStorage.getItem('ayaAppointments') || '[]'
+    );
 
-    // Avatar & Name
+    // ── Initials function ───────────────────────────
     function getInitials(name) {
       if (!name) return '?';
       return name.trim().split(' ')
         .map(w => w[0].toUpperCase()).slice(0, 2).join('');
     }
 
+    // ── Avatar & Name ───────────────────────────────
     if (userData) {
       document.getElementById('avatarCircle').textContent =
         getInitials(userData.name);
-      document.getElementById('profileName').textContent = userData.name;
-      document.getElementById('profileEmail').textContent = userData.email;
+      document.getElementById('profileName').textContent =
+        userData.name;
+      document.getElementById('profileEmail').textContent =
+        userData.email;
     }
 
-    document.getElementById('apptCount').textContent = appts.length;
+    document.getElementById('apptCount').textContent =
+      appts.length;
 
-    // Blood Group
+    // ── Blood Group ─────────────────────────────────
     if (patient && patient.bloodGroup) {
       document.getElementById('bloodBadge').textContent =
         'Blood Group: ' + patient.bloodGroup;
     }
 
-    // Personal Info
+    // ── Personal Info ───────────────────────────────
     if (patient) {
       document.getElementById('personalInfo').innerHTML = `
         <div style="display:flex;justify-content:space-between;
           padding:7px 0;border-bottom:1px solid var(--border);">
-          <span class="text-muted" style="font-size:0.82rem;">Age</span>
-          <span style="font-weight:700;">${patient.age || '—'} yrs</span>
+          <span class="text-muted" style="font-size:0.82rem;">
+            Age</span>
+          <span style="font-weight:700;">
+            ${patient.age || '—'} yrs</span>
         </div>
         <div style="display:flex;justify-content:space-between;
           padding:7px 0;border-bottom:1px solid var(--border);">
-          <span class="text-muted" style="font-size:0.82rem;">Gender</span>
-          <span style="font-weight:700;">${patient.gender || '—'}</span>
+          <span class="text-muted" style="font-size:0.82rem;">
+            Gender</span>
+          <span style="font-weight:700;">
+            ${patient.gender || '—'}</span>
         </div>
         <div style="display:flex;justify-content:space-between;
           padding:7px 0;border-bottom:1px solid var(--border);">
-          <span class="text-muted" style="font-size:0.82rem;">Contact</span>
-          <span style="font-weight:700;">${patient.contact || '—'}</span>
+          <span class="text-muted" style="font-size:0.82rem;">
+            Contact</span>
+          <span style="font-weight:700;">
+            ${patient.contact || '—'}</span>
         </div>
         <div style="display:flex;justify-content:space-between;
           padding:7px 0;">
-          <span class="text-muted" style="font-size:0.82rem;">Address</span>
-          <span style="font-weight:700;text-align:right;max-width:60%;">
+          <span class="text-muted" style="font-size:0.82rem;">
+            Address</span>
+          <span style="font-weight:700;text-align:right;
+            max-width:60%;">
             ${patient.address || '—'}</span>
         </div>`;
     }
 
-    // Vitals
+    // ── Vitals ──────────────────────────────────────
     if (patient && patient.vitals) {
       const v = patient.vitals;
       document.getElementById('vitalsSummary').innerHTML = `
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div style="display:grid;
+          grid-template-columns:1fr 1fr;gap:10px;">
           ${[
             ['❤️ BP',    v.bp     || '—'],
-            ['🌡️ Temp', v.temp   ? v.temp + ' °F' : '—'],
-            ['💓 Pulse', v.pulse  ? v.pulse + ' bpm' : '—'],
-            ['🩸 SpO2',  v.spo2   ? v.spo2 + '%' : '—'],
-            ['⚖️ Weight',v.weight ? v.weight + ' kg' : '—'],
-            ['📏 Height',v.height ? v.height + ' cm' : '—'],
+            ['🌡️ Temp', v.temp   ? v.temp   + ' °F'  : '—'],
+            ['💓 Pulse', v.pulse  ? v.pulse  + ' bpm' : '—'],
+            ['🩸 SpO2',  v.spo2   ? v.spo2   + '%'    : '—'],
+            ['⚖️ Weight',v.weight ? v.weight + ' kg'  : '—'],
+            ['📏 Height',v.height ? v.height + ' cm'  : '—'],
           ].map(([lbl, val]) => `
-            <div style="background:var(--bg);border-radius:9px;padding:10px;">
-              <div style="font-size:0.75rem;color:var(--text-muted);">
-                ${lbl}</div>
-              <div style="font-weight:700;font-size:0.95rem;margin-top:3px;">
-                ${val}</div>
+            <div style="background:var(--bg);
+              border-radius:9px;padding:10px;">
+              <div style="font-size:0.75rem;
+                color:var(--text-muted);">${lbl}</div>
+              <div style="font-weight:700;font-size:0.95rem;
+                margin-top:3px;">${val}</div>
             </div>
           `).join('')}
         </div>`;
     }
 
-    // Settings
+    // ── Dark Mode ───────────────────────────────────
     document.getElementById('darkToggle').checked =
       localStorage.getItem('ayaDarkMode') === 'true';
-
     if (localStorage.getItem('ayaDarkMode') === 'true') {
       document.body.classList.add('dark-mode');
     }
 
+    // ══════════════════════════════════════════════
+    //   ADMIN BUTTON — sirf is email ko dikhega
+    // ══════════════════════════════════════════════
+    const ADMIN_EMAIL = 'bhosalemayuresh79@gmail.com';
+
+    if (userData && userData.email === ADMIN_EMAIL) {
+      // Sirf admin email pe button dikhao
+      document.getElementById('adminBtnContainer')
+        .style.display = 'block';
+    }
+
+    function openAdminPanel() {
+      // Admin email double check
+      if (!userData || userData.email !== ADMIN_EMAIL) {
+        alert('❌ Admin access nahi hai!');
+        return;
+      }
+      // Admin session set karo
+      sessionStorage.setItem('ayaAdmin', 'true');
+      // Admin panel pe jao
+      window.location.href = 'admin.html';
+    }
+
+    // ── Settings functions ──────────────────────────
     function openSettings() {
-      document.getElementById('settingsPanel').classList.add('open');
-      document.getElementById('settingsOverlay').classList.add('show');
+      document.getElementById('settingsPanel')
+        .classList.add('open');
+      document.getElementById('settingsOverlay')
+        .classList.add('show');
     }
+
     function closeSettings() {
-      document.getElementById('settingsPanel').classList.remove('open');
-      document.getElementById('settingsOverlay').classList.remove('show');
+      document.getElementById('settingsPanel')
+        .classList.remove('open');
+      document.getElementById('settingsOverlay')
+        .classList.remove('show');
     }
+
     function toggleDark(val) {
       localStorage.setItem('ayaDarkMode', val);
       document.body.classList.toggle('dark-mode', val);
     }
+
     function confirmLogout() {
       if (confirm('Logout karna chahte ho?')) {
         localStorage.clear();
