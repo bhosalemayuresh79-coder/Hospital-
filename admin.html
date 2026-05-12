@@ -10,16 +10,67 @@
     rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <style>
-    .admin-header {
-      background: linear-gradient(135deg, #1a73e8, #1558b0);
-      color: white;
-      padding: 20px;
-      text-align: center;
+    /* ── Admin Tab Bar ── */
+    .admin-tab-bar {
+      display: flex;
+      background: #1a73e8;
+      overflow-x: auto;
+      scrollbar-width: none;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
-    .admin-header h1 { font-size: 1.4rem; font-weight: 800; }
-    .admin-header p  { font-size: 0.78rem; opacity: 0.85; margin: 0; }
+    .admin-tab-bar::-webkit-scrollbar { display: none; }
+    .admin-tab {
+      flex-shrink: 0;
+      padding: 12px 18px;
+      color: rgba(255,255,255,0.7);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s;
+      border: none;
+      background: none;
+      font-family: 'Poppins', sans-serif;
+    }
+    .admin-tab.active {
+      color: white;
+      border-bottom: 3px solid white;
+    }
 
-    /* Click-to-edit stat card */
+    /* ── Page Sections ── */
+    .admin-page { display: none; padding: 16px; }
+    .admin-page.active { display: block; }
+
+    /* ── Editable field ── */
+    .editable {
+      cursor: pointer;
+      border-bottom: 2px dashed var(--blue);
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: background 0.2s;
+      display: inline-block;
+      min-width: 40px;
+    }
+    .editable:hover { background: var(--blue-light); }
+
+    /* ── Edit input ── */
+    .edit-input {
+      border: 2px solid var(--blue);
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-family: 'Poppins', sans-serif;
+      font-size: inherit;
+      font-weight: inherit;
+      color: var(--blue);
+      background: var(--blue-light);
+      outline: none;
+      width: 100%;
+    }
+
+    /* ── Stat cards editable ── */
     .edit-stat-card {
       background: var(--card-bg);
       border-radius: 14px;
@@ -28,395 +79,744 @@
       padding: 20px 16px;
       text-align: center;
       cursor: pointer;
-      transition: box-shadow 0.2s, border-color 0.2s;
+      transition: all 0.2s;
       position: relative;
     }
     .edit-stat-card:hover {
-      box-shadow: 0 4px 24px rgba(26,115,232,0.18);
       border-color: var(--blue);
+      box-shadow: 0 4px 24px rgba(26,115,232,0.2);
     }
     .edit-stat-card .stat-icon { font-size: 1.8rem; margin-bottom: 8px; }
-    .edit-stat-card .stat-num  {
-      font-size: 2rem; font-weight: 800;
-      color: var(--blue); line-height: 1;
+    .edit-stat-card .stat-num {
+      font-size: 2rem; font-weight: 800; color: var(--blue);
     }
-    .edit-stat-card .stat-lbl  {
+    .edit-stat-card .stat-lbl {
       font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;
     }
     .edit-stat-card .edit-hint {
-      font-size: 0.65rem; color: var(--blue);
-      opacity: 0.7; margin-top: 6px;
+      font-size: 0.65rem; color: var(--blue); opacity: 0.7; margin-top: 6px;
     }
-
-    /* Inline edit input */
     .inline-input {
-      font-size: 2rem; font-weight: 800;
-      color: var(--blue); text-align: center;
-      border: 2px solid var(--blue);
+      font-size: 2rem; font-weight: 800; color: var(--blue);
+      text-align: center; border: 2px solid var(--blue);
       border-radius: 8px; width: 100%;
-      background: var(--blue-light);
-      padding: 4px 8px; outline: none;
-      font-family: 'Poppins', sans-serif;
+      background: var(--blue-light); padding: 4px 8px;
+      outline: none; font-family: 'Poppins', sans-serif;
     }
-
-    /* Saving indicator */
-    .saving-badge {
+    .save-badge {
       position: absolute; top: 8px; right: 8px;
-      background: var(--blue); color: white;
       font-size: 0.62rem; font-weight: 600;
       padding: 2px 8px; border-radius: 20px;
       display: none;
     }
-    .saving-badge.show { display: inline-block; }
-
-    /* Saved indicator */
-    .saved-badge {
-      position: absolute; top: 8px; right: 8px;
-      background: #22c55e; color: white;
-      font-size: 0.62rem; font-weight: 600;
-      padding: 2px 8px; border-radius: 20px;
-      display: none;
+    .save-badge.saving {
+      display: inline-block; background: var(--blue); color: white;
     }
-    .saved-badge.show { display: inline-block; }
+    .save-badge.saved {
+      display: inline-block; background: #22c55e; color: white;
+    }
 
-    /* Password screen */
-    .password-screen {
+    /* ── Login Screen ── */
+    .login-screen {
       min-height: 100vh;
-      display: flex; align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       background: linear-gradient(135deg, #e8f0fe, #f4f7fb);
     }
-    .password-card {
-      background: white; border-radius: 18px;
+    .login-card-admin {
+      background: white; border-radius: 20px;
       padding: 36px 28px;
-      box-shadow: 0 8px 40px rgba(26,115,232,0.13);
-      width: 100%; max-width: 340px; margin: 16px;
+      box-shadow: 0 8px 40px rgba(26,115,232,0.15);
+      width: 100%; max-width: 360px; margin: 16px;
       text-align: center;
     }
     .admin-content { display: none; }
+
+    /* ── Contact card ── */
+    .contact-row-edit {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 12px 0; border-bottom: 1px solid var(--border);
+    }
+    .contact-row-edit:last-child { border-bottom: none; }
+
+    /* ── Save & Exit button ── */
+    .btn-save-exit {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white; border: none; border-radius: 10px;
+      padding: 14px; font-family: 'Poppins', sans-serif;
+      font-size: 0.95rem; font-weight: 700;
+      width: 100%; cursor: pointer;
+      box-shadow: 0 4px 15px rgba(34,197,94,0.3);
+    }
   </style>
 </head>
 <body>
-
-  <!-- PASSWORD SCREEN -->
-  <div class="password-screen" id="passwordScreen">
-    <div class="password-card">
-      <div style="font-size:2.5rem;">🔐</div>
-      <h2 style="font-size:1.2rem;font-weight:800;
+  <!-- ══════════════════════════════════════════
+       LOGIN SCREEN
+  ══════════════════════════════════════════ -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-card-admin">
+      <div style="font-size:2.8rem;">🔐</div>
+      <h2 style="font-size:1.3rem;font-weight:800;
         color:var(--blue);margin:10px 0 4px;">
-        Admin Panel
+        Admin Login
       </h2>
       <p style="font-size:0.78rem;color:var(--text-muted);
         margin-bottom:20px;">
         Aya Hospital — Sirf Admin ke liye
       </p>
 
+      <!-- Alert box -->
+      <div id="loginAlertBox"></div>
+
       <div class="form-group" style="text-align:left;">
         <label style="font-size:0.78rem;font-weight:600;
           color:var(--text-muted);text-transform:uppercase;
           letter-spacing:0.4px;display:block;margin-bottom:5px;">
-          Admin Password
+          Email
         </label>
-        <input type="password" id="adminPassword"
-          class="form-control" placeholder="Password daalo"
-          onkeydown="if(event.key==='Enter') checkPassword()" />
+        <input type="email" id="adminEmail"
+          class="form-control" placeholder="Admin email daalo" />
       </div>
 
-      <button class="btn-primary" style="margin-top:12px;"
-        onclick="checkPassword()">
-        🔓 Login as Admin
+      <div class="form-group" style="text-align:left;margin-top:12px;">
+        <label style="font-size:0.78rem;font-weight:600;
+          color:var(--text-muted);text-transform:uppercase;
+          letter-spacing:0.4px;display:block;margin-bottom:5px;">
+          Password
+        </label>
+        <input type="password" id="adminPass"
+          class="form-control" placeholder="Password daalo"
+          onkeydown="if(event.key==='Enter') doAdminLogin()" />
+      </div>
+
+      <button id="adminLoginBtn"
+        class="btn-primary" style="margin-top:16px;"
+        onclick="doAdminLogin()">
+        🔓 Admin Login
       </button>
 
-      <div id="pwError" style="color:var(--red);font-size:0.8rem;
-        margin-top:10px;display:none;">
-        ❌ Galat password!
-      </div>
+      <p style="font-size:0.72rem;color:var(--text-muted);
+        margin-top:14px;">
+        Sirf authorized admin hi login kar sakta hai.
+      </p>
     </div>
   </div>
-  <!-- ADMIN CONTENT — password ke baad dikhega -->
+
+  <!-- ══════════════════════════════════════════
+       ADMIN CONTENT
+  ══════════════════════════════════════════ -->
   <div class="admin-content" id="adminContent">
 
     <!-- Admin Header -->
-    <div class="admin-header">
-      <h1>⚙️ Aya Hospital Admin Panel</h1>
-      <p>Live stats edit karo — Firestore mein seedha save hoga</p>
+    <div style="background:linear-gradient(135deg,#1a73e8,#1558b0);
+      color:white;padding:16px 20px;
+      display:flex;justify-content:space-between;align-items:center;">
+      <div>
+        <div style="font-size:1.1rem;font-weight:800;">
+          ⚙️ Admin Panel</div>
+        <div style="font-size:0.72rem;opacity:0.85;">
+          Aya Hospital — Live Editor</div>
+      </div>
+      <div style="font-size:0.72rem;opacity:0.85;text-align:right;"
+        id="adminUserEmail">—</div>
     </div>
 
-    <div style="padding:16px;">
+    <!-- ══ ADMIN TAB BAR ══ -->
+    <div class="admin-tab-bar">
+      <button class="admin-tab active"
+        onclick="showAdminPage('pageHome', this)">
+        🏠 Home
+      </button>
+      <button class="admin-tab"
+        onclick="showAdminPage('pagePatient', this)">
+        📋 Patient
+      </button>
+      <button class="admin-tab"
+        onclick="showAdminPage('pageEmergency', this)">
+        🚨 Emergency
+      </button>
+      <button class="admin-tab"
+        onclick="showAdminPage('pageAppointment', this)">
+        📅 Appointment
+      </button>
+      <button class="admin-tab"
+        onclick="showAdminPage('pageProfile', this)">
+        👤 Profile
+      </button>
+    </div>
 
-      <!-- Info Banner -->
-      <div style="background:var(--blue-light);border-radius:10px;
-        padding:12px 16px;margin-bottom:16px;
-        font-size:0.82rem;color:var(--blue);font-weight:500;">
-        💡 Kisi bhi number par <strong>click karo</strong> →
-        edit karo → bahar click karo → Firestore mein save!
-      </div>
+    <!-- Info tip -->
+    <div style="background:var(--blue-light);padding:10px 16px;
+      font-size:0.78rem;color:var(--blue);font-weight:500;">
+      💡 Kisi bhi <strong>number ya text</strong> par
+      click karo → edit karo → bahar click karo → auto save!
+    </div>
+    <!-- ══════════════════════════════════════════
+         PAGE 1 — HOME
+    ══════════════════════════════════════════ -->
+    <div class="admin-page active" id="pageHome">
 
-      <!-- STATS GRID — Click to Edit -->
       <div class="section-title">📊 Hospital Stats</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;
-        gap:12px;margin-bottom:20px;">
+        gap:12px;margin-bottom:16px;">
 
-        <!-- Patients Today -->
-        <div class="edit-stat-card"
-          id="card_patientsToday"
+        <div class="edit-stat-card" id="card_patientsToday"
           onclick="startEdit('patientsToday')">
-          <div class="saving-badge" id="saving_patientsToday">
-            Saving…</div>
-          <div class="saved-badge" id="saved_patientsToday">
-            ✅ Saved</div>
+          <div class="save-badge" id="badge_patientsToday"></div>
           <div class="stat-icon">🧑‍⚕️</div>
-          <div class="stat-num"
-            id="display_patientsToday">—</div>
+          <div class="stat-num" id="display_patientsToday">—</div>
           <div class="stat-lbl">Patients Today</div>
           <div class="edit-hint">✏️ Click to edit</div>
         </div>
 
-        <!-- Doctors Available -->
-        <div class="edit-stat-card"
-          id="card_doctorsAvailable"
+        <div class="edit-stat-card" id="card_doctorsAvailable"
           onclick="startEdit('doctorsAvailable')">
-          <div class="saving-badge" id="saving_doctorsAvailable">
-            Saving…</div>
-          <div class="saved-badge" id="saved_doctorsAvailable">
-            ✅ Saved</div>
+          <div class="save-badge" id="badge_doctorsAvailable"></div>
           <div class="stat-icon">👨‍⚕️</div>
-          <div class="stat-num"
-            id="display_doctorsAvailable">—</div>
+          <div class="stat-num" id="display_doctorsAvailable">—</div>
           <div class="stat-lbl">Doctors Available</div>
           <div class="edit-hint">✏️ Click to edit</div>
         </div>
 
-        <!-- Emergency Count -->
-        <div class="edit-stat-card"
-          id="card_emergencyCount"
+        <div class="edit-stat-card" id="card_emergencyCount"
           onclick="startEdit('emergencyCount')">
-          <div class="saving-badge" id="saving_emergencyCount">
-            Saving…</div>
-          <div class="saved-badge" id="saved_emergencyCount">
-            ✅ Saved</div>
+          <div class="save-badge" id="badge_emergencyCount"></div>
           <div class="stat-icon">🚨</div>
-          <div class="stat-num"
-            id="display_emergencyCount"
+          <div class="stat-num" id="display_emergencyCount"
             style="color:var(--red);">—</div>
           <div class="stat-lbl">Emergency Cases</div>
           <div class="edit-hint">✏️ Click to edit</div>
         </div>
 
-        <!-- Total Patients (bonus) -->
-        <div class="edit-stat-card"
-          id="card_totalPatients"
+        <div class="edit-stat-card" id="card_totalPatients"
           onclick="startEdit('totalPatients')">
-          <div class="saving-badge" id="saving_totalPatients">
-            Saving…</div>
-          <div class="saved-badge" id="saved_totalPatients">
-            ✅ Saved</div>
+          <div class="save-badge" id="badge_totalPatients"></div>
           <div class="stat-icon">📋</div>
-          <div class="stat-num"
-            id="display_totalPatients">—</div>
+          <div class="stat-num" id="display_totalPatients">—</div>
           <div class="stat-lbl">Total Patients</div>
           <div class="edit-hint">✏️ Click to edit</div>
         </div>
 
       </div>
 
-      <!-- Last Updated -->
-      <div style="text-align:center;font-size:0.75rem;
-        color:var(--text-muted);margin-bottom:20px;">
-        🕐 Last updated: <span id="lastUpdated">—</span>
+      <div class="section-title">📢 Hospital Notice</div>
+      <div class="card">
+        <label style="font-size:0.78rem;font-weight:600;
+          color:var(--text-muted);display:block;margin-bottom:8px;">
+          Home page notice / announcement
+        </label>
+        <textarea id="homeNotice" class="form-control" rows="3"
+          placeholder="e.g. OPD timing changed to 9AM-5PM"
+          onblur="saveText('homeNotice', this.value)">
+        </textarea>
+        <div style="font-size:0.72rem;color:var(--text-muted);
+          margin-top:6px;">
+          Bahar click karte hi Firestore mein save hoga
+        </div>
       </div>
 
-      <!-- Recent Patients from Firestore -->
       <div class="section-title">👥 Recent Patients</div>
-      <div id="recentPatients" class="card">
+      <div class="card" id="recentPatientsList">
         <p class="text-muted text-center">Loading…</p>
       </div>
 
-      <!-- Logout -->
-      <div style="margin-top:24px;">
-        <button class="btn-danger" onclick="adminLogout()">
-          🚪 Admin Logout
-        </button>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         PAGE 2 — PATIENT
+    ══════════════════════════════════════════ -->
+    <div class="admin-page" id="pagePatient">
+
+      <div class="section-title">📋 Patient Records</div>
+      <div id="patientRecordsList">
+        <p class="text-muted text-center"
+          style="padding:20px 0;">Loading…</p>
+      </div>
+
+      <div class="section-title" style="margin-top:16px;">
+        ⚙️ Patient Form Settings</div>
+      <div class="card">
+
+        <div class="form-group">
+          <label style="font-size:0.78rem;font-weight:600;
+            color:var(--text-muted);display:block;margin-bottom:6px;">
+            Form Header Title
+          </label>
+          <input type="text" id="patientFormTitle"
+            class="form-control"
+            placeholder="e.g. Patient Details"
+            onblur="saveText('patientFormTitle', this.value)" />
+        </div>
+
+        <div class="form-group" style="margin-top:12px;">
+          <label style="font-size:0.78rem;font-weight:600;
+            color:var(--text-muted);display:block;margin-bottom:6px;">
+            Footer Note (shown below save button)
+          </label>
+          <textarea id="patientFooterNote" class="form-control"
+            rows="2"
+            placeholder="e.g. All data is encrypted and secure"
+            onblur="saveText('patientFooterNote', this.value)">
+          </textarea>
+        </div>
+
+      </div>
+    </div>
+    <!-- ══════════════════════════════════════════
+         PAGE 3 — EMERGENCY
+    ══════════════════════════════════════════ -->
+    <div class="admin-page" id="pageEmergency">
+
+      <div class="section-title">🚨 Emergency Numbers</div>
+      <div class="card">
+
+        <div class="form-group">
+          <label style="font-size:0.78rem;font-weight:600;
+            color:var(--text-muted);display:block;margin-bottom:6px;">
+            🚑 Ambulance Number
+          </label>
+          <input type="text" id="emergAmbulance"
+            class="form-control" placeholder="e.g. 108"
+            onblur="saveText('emergAmbulance', this.value)" />
+        </div>
+
+        <div class="form-group" style="margin-top:12px;">
+          <label style="font-size:0.78rem;font-weight:600;
+            color:var(--text-muted);display:block;margin-bottom:6px;">
+            🏥 Hospital Front Desk
+          </label>
+          <input type="text" id="emergFrontDesk"
+            class="form-control"
+            placeholder="e.g. +91-1800-XXX-1234"
+            onblur="saveText('emergFrontDesk', this.value)" />
+        </div>
+
+        <div class="form-group" style="margin-top:12px;">
+          <label style="font-size:0.78rem;font-weight:600;
+            color:var(--text-muted);display:block;margin-bottom:6px;">
+            🚒 Fire Brigade
+          </label>
+          <input type="text" id="emergFire"
+            class="form-control" placeholder="e.g. 101"
+            onblur="saveText('emergFire', this.value)" />
+        </div>
+
+        <div class="form-group" style="margin-top:12px;">
+          <label style="font-size:0.78rem;font-weight:600;
+            color:var(--text-muted);display:block;margin-bottom:6px;">
+            👮 Police
+          </label>
+          <input type="text" id="emergPolice"
+            class="form-control" placeholder="e.g. 100"
+            onblur="saveText('emergPolice', this.value)" />
+        </div>
+
+        <div class="form-group" style="margin-top:12px;">
+          <label style="font-size:0.78rem;font-weight:600;
+            color:var(--text-muted);display:block;margin-bottom:6px;">
+            🧠 Mental Health Helpline
+          </label>
+          <input type="text" id="emergMental"
+            class="form-control" placeholder="e.g. 9152987821"
+            onblur="saveText('emergMental', this.value)" />
+        </div>
+
+      </div>
+
+      <div class="section-title">🩹 First Aid Tips</div>
+      <div class="card">
+        <div class="form-group">
+          <label style="font-size:0.78rem;font-weight:600;
+            color:var(--text-muted);display:block;margin-bottom:6px;">
+            🫀 CPR Tip
+          </label>
+          <textarea id="tipCPR" class="form-control" rows="2"
+            onblur="saveText('tipCPR', this.value)"
+            placeholder="CPR instructions…"></textarea>
+        </div>
+        <div class="form-group" style="margin-top:12px;">
+          <label style="font-size:0.78rem;font-weight:600;
+            color:var(--text-muted);display:block;margin-bottom:6px;">
+            🩹 Bleeding Tip
+          </label>
+          <textarea id="tipBleeding" class="form-control" rows="2"
+            onblur="saveText('tipBleeding', this.value)"
+            placeholder="Bleeding instructions…"></textarea>
+        </div>
+        <div class="form-group" style="margin-top:12px;">
+          <label style="font-size:0.78rem;font-weight:600;
+            color:var(--text-muted);display:block;margin-bottom:6px;">
+            🌡️ Heat Stroke Tip
+          </label>
+          <textarea id="tipHeatStroke" class="form-control" rows="2"
+            onblur="saveText('tipHeatStroke', this.value)"
+            placeholder="Heat stroke instructions…"></textarea>
+        </div>
       </div>
 
     </div>
+
+    <!-- ══════════════════════════════════════════
+         PAGE 4 — APPOINTMENT
+    ══════════════════════════════════════════ -->
+    <div class="admin-page" id="pageAppointment">
+
+      <div class="section-title">📅 All Appointments</div>
+      <div id="allAppointmentsList">
+        <p class="text-muted text-center"
+          style="padding:20px 0;">Loading…</p>
+      </div>
+
+      <div class="section-title" style="margin-top:16px;">
+        ⚙️ Appointment Settings</div>
+      <div class="card">
+        <div class="form-group">
+          <label style="font-size:0.78rem;font-weight:600;
+            color:var(--text-muted);display:block;margin-bottom:6px;">
+            Morning Slot Timing
+          </label>
+          <input type="text" id="slotMorning"
+            class="form-control"
+            placeholder="e.g. 8:00 AM – 12:00 PM"
+            onblur="saveText('slotMorning', this.value)" />
+        </div>
+        <div class="form-group" style="margin-top:12px;">
+          <label style="font-size:0.78rem;font-weight:600;
+            color:var(--text-muted);display:block;margin-bottom:6px;">
+            Afternoon Slot Timing
+          </label>
+          <input type="text" id="slotAfternoon"
+            class="form-control"
+            placeholder="e.g. 12:00 PM – 4:00 PM"
+            onblur="saveText('slotAfternoon', this.value)" />
+        </div>
+        <div class="form-group" style="margin-top:12px;">
+          <label style="font-size:0.78rem;font-weight:600;
+            color:var(--text-muted);display:block;margin-bottom:6px;">
+            Evening Slot Timing
+          </label>
+          <input type="text" id="slotEvening"
+            class="form-control"
+            placeholder="e.g. 4:00 PM – 8:00 PM"
+            onblur="saveText('slotEvening', this.value)" />
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         PAGE 5 — PROFILE
+    ══════════════════════════════════════════ -->
+    <div class="admin-page" id="pageProfile">
+
+      <div class="section-title">👤 App Settings</div>
+      <div class="card">
+        <div class="form-group">
+          <label style="font-size:0.78rem;font-weight:600;
+            color:var(--text-muted);display:block;margin-bottom:6px;">
+            Hospital Name
+          </label>
+          <input type="text" id="hospitalName"
+            class="form-control" placeholder="e.g. Aya Hospital"
+            onblur="saveText('hospitalName', this.value)" />
+        </div>
+        <div class="form-group" style="margin-top:12px;">
+          <label style="font-size:0.78rem;font-weight:600;
+            color:var(--text-muted);display:block;margin-bottom:6px;">
+            Tagline
+          </label>
+          <input type="text" id="hospitalTagline"
+            class="form-control"
+            placeholder="e.g. Aapki Seva Yahi Humara Kartavya"
+            onblur="saveText('hospitalTagline', this.value)" />
+        </div>
+        <div class="form-group" style="margin-top:12px;">
+          <label style="font-size:0.78rem;font-weight:600;
+            color:var(--text-muted);display:block;margin-bottom:6px;">
+            App Version
+          </label>
+          <input type="text" id="appVersion"
+            class="form-control" placeholder="e.g. 1.0.0"
+            onblur="saveText('appVersion', this.value)" />
+        </div>
+        <div class="form-group" style="margin-top:12px;">
+          <label style="font-size:0.78rem;font-weight:600;
+            color:var(--text-muted);display:block;margin-bottom:6px;">
+            Admin Contact Email
+          </label>
+          <input type="text" id="adminContact"
+            class="form-control"
+            placeholder="e.g. bhosalemayuresh79@gmail.com"
+            onblur="saveText('adminContact', this.value)" />
+        </div>
+      </div>
+
+      <div class="section-title">📊 App Statistics</div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;
+          padding:8px 0;border-bottom:1px solid var(--border);">
+          <span class="text-muted" style="font-size:0.82rem;">
+            Total Patients in DB</span>
+          <span style="font-weight:700;" id="totalPatientsDB">—</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;
+          padding:8px 0;">
+          <span class="text-muted" style="font-size:0.82rem;">
+            Last Updated</span>
+          <span style="font-weight:700;font-size:0.78rem;"
+            id="lastUpdatedTime">—</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══ SAVE & EXIT BUTTON ══ -->
+    <div style="padding:16px;">
+      <button class="btn-save-exit" onclick="saveAndExit()">
+        💾 Save & Exit
+      </button>
+    </div>
+
   </div><!-- /adminContent -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
   </script>
 
   <script type="module">
-    import { db } from "./firebase-config.js";
+    import { auth, db } from "./firebase-config.js";
+    import {
+      signInWithEmailAndPassword,
+      signOut, onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
     import {
       doc, getDoc, setDoc, updateDoc,
-      collection, getDocs, orderBy,
-      query, limit, onSnapshot, serverTimestamp
+      collection, getDocs, onSnapshot,
+      serverTimestamp, query, limit, orderBy
     } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
-    // ── Admin Password Check ──────────────────────
-    // IMPORTANT: Yeh password apne hisaab se badlo
-    const ADMIN_PASSWORD = 'aya@admin2024';
+    // ── Sirf yeh email admin hai ──────────────────
+    const ADMIN_EMAIL = 'bhosalemayuresh79@gmail.com';
+    const statsRef    = doc(db, 'hospitalStats', 'stats');
+    const settingsRef = doc(db, 'adminSettings', 'config');
 
-    window.checkPassword = function() {
-      const pw = document.getElementById('adminPassword').value;
-      if (pw === ADMIN_PASSWORD) {
-        document.getElementById('passwordScreen').style.display = 'none';
-        document.getElementById('adminContent').style.display = 'block';
-        sessionStorage.setItem('ayaAdmin', 'true');
-        loadStats();
-        loadRecentPatients();
-      } else {
-        document.getElementById('pwError').style.display = 'block';
+    // ── Login Alert ───────────────────────────────
+    function showLoginAlert(msg, type = 'danger') {
+      document.getElementById('loginAlertBox').innerHTML = `
+        <div class="alert alert-${type} alert-dismissible fade show"
+          style="border-radius:10px;font-size:0.82rem;
+          font-weight:500;margin-bottom:12px;">
+          ${msg}
+          <button type="button" class="btn-close"
+            data-bs-dismiss="alert"></button>
+        </div>`;
+    }
+
+    // ── Admin Login ───────────────────────────────
+    window.doAdminLogin = async function() {
+      const email = document.getElementById('adminEmail').value.trim();
+      const pass  = document.getElementById('adminPass').value;
+      const btn   = document.getElementById('adminLoginBtn');
+
+      if (!email || !pass) {
+        showLoginAlert('⚠️ Email aur Password dono daalo.','warning');
+        return;
+      }
+
+      // Sirf admin email allow karo
+      if (email !== ADMIN_EMAIL) {
+        showLoginAlert('❌ <strong>Tumhe admin access nahi hai.</strong>');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = `
+        <span class="spinner-border spinner-border-sm"
+          style="margin-right:8px;"></span>Login ho raha hai...`;
+
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        // onAuthStateChanged handle karega
+      } catch (err) {
+        const msgs = {
+          'auth/wrong-password':
+            '❌ <strong>Password galat hai.</strong>',
+          'auth/user-not-found':
+            '❌ <strong>Email registered nahi hai.</strong>',
+          'auth/invalid-credential':
+            '❌ <strong>Email ya Password galat hai.</strong>',
+          'auth/too-many-requests':
+            '❌ Bahut zyada tries. Thodi der baad try karo.',
+        };
+        showLoginAlert(msgs[err.code] || '❌ Error: ' + err.code);
+        btn.disabled = false;
+        btn.textContent = '🔓 Admin Login';
       }
     };
 
-    // Auto-login agar session mein hai
-    if (sessionStorage.getItem('ayaAdmin') === 'true') {
-      document.getElementById('passwordScreen').style.display = 'none';
-      document.getElementById('adminContent').style.display = 'block';
+    // ── Auth State ────────────────────────────────
+    onAuthStateChanged(auth, (user) => {
+      if (user && user.email === ADMIN_EMAIL) {
+        // Admin logged in
+        document.getElementById('loginScreen').style.display  = 'none';
+        document.getElementById('adminContent').style.display = 'block';
+        document.getElementById('adminUserEmail').textContent =
+          user.email;
+        loadAllData();
+      } else if (user && user.email !== ADMIN_EMAIL) {
+        // Wrong user
+        showLoginAlert('❌ Tumhara account admin nahi hai.');
+        signOut(auth);
+      }
+    });
+
+    // ── Tab Switch ────────────────────────────────
+    window.showAdminPage = function(pageId, tabEl) {
+      document.querySelectorAll('.admin-page')
+        .forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.admin-tab')
+        .forEach(t => t.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+      tabEl.classList.add('active');
+    };
+
+    // ── Load All Data ─────────────────────────────
+    function loadAllData() {
+      loadStats();
+      loadSettings();
+      loadRecentPatients();
+      loadAllAppointments();
+      loadTotalPatientsCount();
     }
 
-    // ── Stats Field mapping ───────────────────────
-    const statsRef = doc(db, 'hospitalStats', 'stats');
-
-    // ── Load & Listen Stats ───────────────────────
+    // ── Stats — Firestore se real-time ────────────
     function loadStats() {
       onSnapshot(statsRef, (snap) => {
         if (snap.exists()) {
           const d = snap.data();
-          setValue('patientsToday',   d.patientsToday   ?? 0);
-          setValue('doctorsAvailable',d.doctorsAvailable?? 0);
-          setValue('emergencyCount',  d.emergencyCount  ?? 0);
-          setValue('totalPatients',   d.totalPatients   ?? 0);
-
+          setDisplayVal('patientsToday',    d.patientsToday    ?? 0);
+          setDisplayVal('doctorsAvailable', d.doctorsAvailable ?? 0);
+          setDisplayVal('emergencyCount',   d.emergencyCount   ?? 0);
+          setDisplayVal('totalPatients',    d.totalPatients    ?? 0);
           if (d.lastUpdated) {
-            const t = d.lastUpdated.toDate();
-            document.getElementById('lastUpdated').textContent =
-              t.toLocaleString('en-IN');
+            document.getElementById('lastUpdatedTime').textContent =
+              d.lastUpdated.toDate().toLocaleString('en-IN');
           }
         } else {
-          // Pehli baar — default values set karo
           setDoc(statsRef, {
-            patientsToday:    142,
-            doctorsAvailable: 18,
-            emergencyCount:   3,
-            totalPatients:    0,
-            lastUpdated:      serverTimestamp()
+            patientsToday: 142, doctorsAvailable: 18,
+            emergencyCount: 3,  totalPatients: 0,
+            lastUpdated: serverTimestamp()
           });
         }
       });
     }
 
-    function setValue(field, val) {
+    function setDisplayVal(field, val) {
       const el = document.getElementById('display_' + field);
-      if (el && !el.querySelector('input')) {
-        el.textContent = val;
-      }
+      if (el && !el.querySelector('input')) el.textContent = val;
     }
 
-    // ── Click to Edit ─────────────────────────────
-    let currentEditField = null;
+    // ── Click to Edit Stats ───────────────────────
+    let currentField = null;
 
     window.startEdit = function(field) {
-      if (currentEditField === field) return;
-
-      // Pehle wala edit band karo
-      if (currentEditField) finishEdit(currentEditField);
-      currentEditField = field;
+      if (currentField === field) return;
+      if (currentField) finishEdit(currentField);
+      currentField = field;
 
       const displayEl = document.getElementById('display_' + field);
       const currentVal = displayEl.textContent.trim();
       const cardEl = document.getElementById('card_' + field);
-
-      // Card click disable karo editing ke dauran
       cardEl.onclick = null;
 
-      // Number ko input mein badlo
       displayEl.innerHTML = `
-        <input
-          class="inline-input"
-          id="input_${field}"
-          type="number"
-          value="${currentVal}"
-          min="0"
-          autofocus
-        />
-      `;
+        <input class="inline-input" id="input_${field}"
+          type="number" value="${currentVal}" min="0" autofocus />`;
 
       const inputEl = document.getElementById('input_' + field);
-      inputEl.focus();
-      inputEl.select();
-
-      // Bahar click karne par save
-      inputEl.addEventListener('blur', () => finishEdit(field));
-
-      // Enter dabane par save
+      inputEl.focus(); inputEl.select();
+      inputEl.addEventListener('blur',    () => finishEdit(field));
       inputEl.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') inputEl.blur();
+        if (e.key === 'Enter')  inputEl.blur();
         if (e.key === 'Escape') {
           displayEl.textContent = currentVal;
-          currentEditField = null;
-          cardEl.onclick = () => startEdit(field);
+          currentField = null;
+          cardEl.onclick = () => window.startEdit(field);
         }
       });
     };
 
     async function finishEdit(field) {
-      const inputEl = document.getElementById('input_' + field);
+      const inputEl   = document.getElementById('input_' + field);
       if (!inputEl) return;
-
-      const newVal = parseInt(inputEl.value) || 0;
+      const newVal    = parseInt(inputEl.value) || 0;
       const displayEl = document.getElementById('display_' + field);
-      const cardEl = document.getElementById('card_' + field);
-      const savingEl = document.getElementById('saving_' + field);
-      const savedEl  = document.getElementById('saved_'  + field);
+      const cardEl    = document.getElementById('card_' + field);
+      const badgeEl   = document.getElementById('badge_' + field);
 
-      // Display update karo
       displayEl.textContent = newVal;
-
-      // Saving badge dikhao
-      savingEl.classList.add('show');
+      badgeEl.textContent = 'Saving…';
+      badgeEl.className = 'save-badge saving';
 
       try {
-        // Firestore mein save karo
         await updateDoc(statsRef, {
-          [field]: newVal,
-          lastUpdated: serverTimestamp()
+          [field]: newVal, lastUpdated: serverTimestamp()
         });
-
-        // Saved badge dikhao
-        savingEl.classList.remove('show');
-        savedEl.classList.add('show');
-        setTimeout(() => savedEl.classList.remove('show'), 2000);
-
-        console.log('✅ Saved:', field, '=', newVal);
-
+        badgeEl.className = 'save-badge saved';
+        badgeEl.textContent = '✅ Saved';
+        setTimeout(() => badgeEl.className = 'save-badge', 2000);
       } catch (err) {
-        console.error('❌ Save error:', err);
-        savingEl.classList.remove('show');
-        alert('❌ Save nahi hua: ' + err.message);
+        alert('❌ Save error: ' + err.message);
+        badgeEl.className = 'save-badge';
       }
-
-      // Card click wapas enable karo
-      currentEditField = null;
+      currentField = null;
       cardEl.onclick = () => window.startEdit(field);
+    }
+
+    // ── Save Text Fields ──────────────────────────
+    window.saveText = async function(field, value) {
+      try {
+        await setDoc(settingsRef,
+          { [field]: value, lastUpdated: serverTimestamp() },
+          { merge: true }
+        );
+        console.log('✅ Saved:', field);
+      } catch (err) {
+        console.error('❌', err);
+      }
+    };
+
+    // ── Load Settings into fields ─────────────────
+    async function loadSettings() {
+      const snap = await getDoc(settingsRef);
+      if (!snap.exists()) return;
+      const d = snap.data();
+      const fields = [
+        'homeNotice','patientFormTitle','patientFooterNote',
+        'emergAmbulance','emergFrontDesk','emergFire',
+        'emergPolice','emergMental',
+        'tipCPR','tipBleeding','tipHeatStroke',
+        'slotMorning','slotAfternoon','slotEvening',
+        'hospitalName','hospitalTagline','appVersion','adminContact'
+      ];
+      fields.forEach(f => {
+        const el = document.getElementById(f);
+        if (el && d[f]) el.value = d[f];
+      });
     }
 
     // ── Recent Patients ───────────────────────────
     async function loadRecentPatients() {
-      const container = document.getElementById('recentPatients');
+      const container = document.getElementById('recentPatientsList');
       try {
-        const q = query(
-          collection(db, 'patients'),
-          limit(5)
+        const snap = await getDocs(
+          query(collection(db,'patients'), limit(10))
         );
-        const snap = await getDocs(q);
-
         if (snap.empty) {
           container.innerHTML =
-            '<p class="text-muted text-center">Koi patient record nahi mila.</p>';
+            '<p class="text-muted text-center">Koi patient nahi.</p>';
           return;
         }
-
         container.innerHTML = snap.docs.map(d => {
           const p = d.data();
           return `
@@ -424,42 +824,80 @@
               align-items:center;padding:10px 0;
               border-bottom:1px solid var(--border);">
               <div>
-                <div style="font-weight:700;font-size:0.9rem;">
+                <div style="font-weight:700;">
                   👤 ${p.fullName || '—'}</div>
-                <div style="font-size:0.75rem;color:var(--text-muted);">
-                  ${p.age ? p.age + ' yrs' : ''} •
-                  ${p.bloodGroup || '—'} •
-                  ${p.gender || '—'}
+                <div style="font-size:0.75rem;
+                  color:var(--text-muted);">
+                  ${p.age||''}yrs • ${p.bloodGroup||'—'} •
+                  ${p.contact||'—'}
                 </div>
               </div>
               <span style="background:var(--blue-light);
                 color:var(--blue);padding:3px 10px;
-                border-radius:20px;font-size:0.68rem;font-weight:600;">
+                border-radius:20px;font-size:0.68rem;
+                font-weight:600;">
                 ${p.savedAt
-                  ? new Date(p.savedAt).toLocaleDateString('en-IN')
+                  ? new Date(p.savedAt)
+                      .toLocaleDateString('en-IN')
                   : '—'}
               </span>
             </div>`;
         }).join('');
-
-      } catch (err) {
+      } catch(err) {
         container.innerHTML =
-          `<p class="text-muted text-center">
-            Error: ${err.message}</p>`;
+          `<p class="text-muted text-center">${err.message}</p>`;
       }
     }
 
-    // ── Admin Logout ──────────────────────────────
-    window.adminLogout = function() {
-      sessionStorage.removeItem('ayaAdmin');
-      window.location.href = 'index.html';
-    };
-
-    // ── Page load par check ───────────────────────
-    if (sessionStorage.getItem('ayaAdmin') === 'true') {
-      loadStats();
-      loadRecentPatients();
+    // ── All Appointments ──────────────────────────
+    async function loadAllAppointments() {
+      const container = document.getElementById('allAppointmentsList');
+      const appts = JSON.parse(
+        localStorage.getItem('ayaAppointments') || '[]'
+      );
+      if (!appts.length) {
+        container.innerHTML =
+          '<p class="text-muted text-center" style="padding:20px;">'+
+          'Koi appointment nahi.</p>';
+        return;
+      }
+      container.innerHTML = appts.map(a => `
+        <div class="card" style="margin-bottom:10px;">
+          <div style="font-weight:700;">👨‍⚕️ ${a.doctor}</div>
+          <div style="font-size:0.78rem;color:var(--text-muted);
+            margin-top:4px;">
+            👤 ${a.patient||'—'} • 📅
+            ${a.date
+              ? new Date(a.date).toLocaleDateString('en-IN')
+              : '—'}
+            • ⏰ ${a.slot||'—'}
+          </div>
+          <div style="margin-top:6px;">
+            <span style="background:var(--blue-light);
+              color:var(--blue);padding:3px 10px;
+              border-radius:20px;font-size:0.7rem;font-weight:600;">
+              ${a.type||'In-person'}
+            </span>
+          </div>
+        </div>`).join('');
     }
+
+    // ── Total Patients Count ──────────────────────
+    async function loadTotalPatientsCount() {
+      const snap = await getDocs(collection(db,'patients'));
+      document.getElementById('totalPatientsDB').textContent =
+        snap.size;
+    }
+
+    // ── Save & Exit ───────────────────────────────
+    window.saveAndExit = async function() {
+      try {
+        await signOut(auth);
+        window.location.href = 'home.html';
+      } catch(err) {
+        window.location.href = 'home.html';
+      }
+    };
 
   </script>
 
