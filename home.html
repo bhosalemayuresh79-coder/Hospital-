@@ -26,7 +26,8 @@
         <div class="tagline">Aapki Seva Yahi Humara Kartavya</div>
       </div>
       <div id="headerDate"
-        style="font-size:0.72rem;opacity:0.85;text-align:right;"></div>
+        style="font-size:0.72rem;opacity:0.85;text-align:right;">
+      </div>
     </div>
   </header>
 
@@ -45,27 +46,34 @@
       </div>
     </div>
 
-    <!-- Stats -->
+    <!-- Stats — Firestore se aayenge -->
     <div class="section-title">Today's Overview</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);
       gap:10px;margin-bottom:14px;">
+
       <div class="stat-card">
         <div class="stat-icon">🧑‍⚕️</div>
-        <div class="stat-num">142</div>
+        <!-- id="statPatients" — Firestore se update hoga -->
+        <div class="stat-num" id="statPatients">—</div>
         <div class="stat-lbl">Patients Today</div>
       </div>
+
       <div class="stat-card">
         <div class="stat-icon">👨‍⚕️</div>
-        <div class="stat-num">18</div>
+        <!-- id="statDoctors" — Firestore se update hoga -->
+        <div class="stat-num" id="statDoctors">—</div>
         <div class="stat-lbl">Doctors Available</div>
       </div>
+
       <div class="stat-card">
         <div class="stat-icon">🚨</div>
-        <div class="stat-num" style="color:var(--red);">3</div>
+        <!-- id="statEmergency" — Firestore se update hoga -->
+        <div class="stat-num" id="statEmergency"
+          style="color:var(--red);">—</div>
         <div class="stat-lbl">Emergency</div>
       </div>
-    </div>
 
+    </div>
     <!-- Next Appointment -->
     <div class="section-title">Next Appointment</div>
     <div id="nextAppt" class="card">
@@ -73,7 +81,7 @@
         No upcoming appointments.</p>
     </div>
 
-    <!-- Activity Feed -->
+    <!-- Recent Activity -->
     <div class="section-title">Recent Activity</div>
     <div class="card">
 
@@ -114,6 +122,7 @@
     </div>
 
   </div><!-- /page-content -->
+
   <!-- BOTTOM TAB BAR — Seedha HTML mein -->
   <nav class="tab-bar">
     <a href="home.html" class="tab-item active">
@@ -139,14 +148,16 @@
   </nav>
 
   <div class="toast-msg"></div>
-
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
   </script>
 
+  <!-- Normal JS — Auth, Welcome, Date, Appointments -->
   <script>
     // Auth Check
-    const userData = JSON.parse(localStorage.getItem('ayaUser') || 'null');
+    const userData = JSON.parse(
+      localStorage.getItem('ayaUser') || 'null'
+    );
     if (!userData) { window.location.href = 'index.html'; }
 
     // Welcome Name
@@ -155,7 +166,7 @@
         'Welcome, ' + userData.name + '!';
     }
 
-    // Header Date
+    // Header Date & Time
     const now = new Date();
     document.getElementById('headerDate').innerHTML =
       now.toLocaleDateString('en-IN', {
@@ -188,7 +199,8 @@
             <div style="margin-top:6px;">
               <span style="background:var(--blue-light);
                 color:var(--blue);padding:3px 10px;
-                border-radius:20px;font-size:0.7rem;font-weight:600;">
+                border-radius:20px;font-size:0.7rem;
+                font-weight:600;">
                 ${a.type || 'In-person'}
               </span>
             </div>
@@ -201,6 +213,31 @@
     if (localStorage.getItem('ayaDarkMode') === 'true') {
       document.body.classList.add('dark-mode');
     }
+  </script>
+
+  <!-- Firebase — Firestore se live stats fetch karo -->
+  <script type="module">
+    import { db } from "./firebase-config.js";
+    import { doc, onSnapshot }
+      from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+
+    const statsRef = doc(db, 'hospitalStats', 'stats');
+
+    // Real-time listener — Admin kuch bhi badle,
+    // yahan turant update hoga
+    onSnapshot(statsRef, (snap) => {
+      if (snap.exists()) {
+        const d = snap.data();
+
+        const p  = document.getElementById('statPatients');
+        const dr = document.getElementById('statDoctors');
+        const e  = document.getElementById('statEmergency');
+
+        if (p)  p.textContent  = d.patientsToday    ?? '—';
+        if (dr) dr.textContent = d.doctorsAvailable  ?? '—';
+        if (e)  e.textContent  = d.emergencyCount    ?? '—';
+      }
+    });
   </script>
 
 </body>
